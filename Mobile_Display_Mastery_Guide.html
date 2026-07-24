@@ -1,0 +1,2740 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <title>Mobile Display Mastery Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Tamil:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4;
+      margin: 15mm 12mm 20mm 12mm;
+      @bottom-center {
+        content: "Maha Enics Service Center • Page " counter(page);
+        font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+      color: #1e293b;
+      background-color: #ffffff;
+      line-height: 1.55;
+      font-size: 9pt;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #311b92 70%, #4a148c 100%);
+      color: #ffffff;
+      padding: 45px 40px;
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 12px;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .cover-header {
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      padding-bottom: 20px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.3);
+      border: 1px solid rgba(167, 139, 250, 0.5);
+      color: #e9d5ff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .cover-title {
+      font-size: 30pt;
+      font-weight: 800;
+      line-height: 1.15;
+      margin: 15px 0 10px 0;
+      background: linear-gradient(to right, #ffffff, #ddd6fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover-subtitle {
+      font-size: 16pt;
+      font-weight: 600;
+      color: #c4b5fd;
+      margin-bottom: 20px;
+      font-family: 'Noto Sans Tamil', 'Inter', sans-serif;
+    }
+
+    .cover-body {
+      margin-top: 30px;
+    }
+
+    .cover-icon-box {
+      width: 70px;
+      height: 70px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32pt;
+      margin-bottom: 25px;
+    }
+
+    .cover-description {
+      font-size: 10.5pt;
+      color: #e2e8f0;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 35px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .cover-grid-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover-grid-label {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      color: #a78bfa;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .cover-grid-value {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .cover-footer {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5pt;
+      color: #94a3b8;
+    }
+
+    /* Document Structure */
+    .part-container {
+      page-break-before: always;
+      padding-top: 5px;
+    }
+
+    .part-header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #311b92 100%);
+      color: #ffffff;
+      padding: 16px 22px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .part-title {
+      font-size: 16pt;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .part-subtitle {
+      font-size: 12pt;
+      font-weight: 500;
+      color: #c4b5fd;
+      margin: 4px 0 0 0;
+      font-family: 'Noto Sans Tamil', 'Inter', sans-serif;
+    }
+
+    h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e1b4b;
+      border-bottom: 2px solid #ddd6fe;
+      padding-bottom: 5px;
+      margin-top: 20px;
+      margin-bottom: 12px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #4c1d95;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+
+    strong {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Customer quote box */
+    .customer-quote {
+      background: #f1f5f9;
+      border-left: 4px solid #475569;
+      padding: 8px 14px;
+      margin: 10px 0 14px 0;
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    th {
+      background-color: #2e1065;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #3b0764;
+      font-size: 8.5pt;
+    }
+
+    td {
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+      color: #334155;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Alert Boxes */
+    .alert-box {
+      padding: 10px 14px;
+      margin: 14px 0;
+      border-radius: 6px;
+      page-break-inside: avoid;
+      font-size: 8.5pt;
+      line-height: 1.5;
+    }
+
+    .alert-box p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .alert-box ul {
+      margin: 6px 0 0 0;
+      padding-left: 18px;
+    }
+
+    .alert-box li {
+      color: inherit;
+    }
+
+    .alert-box strong {
+      font-weight: 700;
+    }
+
+    .alert-note {
+      background-color: #eff6ff;
+      border-left: 4px solid #2563eb;
+      color: #1e40af;
+    }
+    .alert-note strong { color: #1e3a8a; }
+
+    .alert-tip {
+      background-color: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      color: #166534;
+    }
+    .alert-tip strong { color: #14532d; }
+
+    .alert-important {
+      background-color: #f5f3ff;
+      border-left: 4px solid #7c3aed;
+      color: #5b21b6;
+    }
+    .alert-important strong { color: #4c1d95; }
+
+    .alert-warning {
+      background-color: #fffbe6;
+      border-left: 4px solid #d97706;
+      color: #92400e;
+    }
+    .alert-warning strong { color: #78350f; }
+
+    .alert-caution {
+      background-color: #fef2f2;
+      border-left: 4px solid #dc2626;
+      color: #991b1b;
+    }
+    .alert-caution strong { color: #7f1d1d; }
+
+    /* Lists */
+    ol, ul {
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 3px;
+      color: #334155;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #e2e8f0;
+      margin: 18px 0;
+    }
+
+    .toc-table th {
+      background-color: #1e1b4b;
+    }
+
+    .meta-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+    }
+    .meta-box p {
+      margin: 3px 0;
+      font-size: 8.5pt;
+    }
+
+    .doc-footer {
+      margin-top: 30px;
+      padding: 15px 0;
+      border-top: 2px solid #e2e8f0;
+      font-size: 8.5pt;
+      color: #64748b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER PAGE -->
+  <div class="cover-page">
+    <div class="cover-header">
+      <div class="cover-badge">Maha Enics Service Center • Technical Guide</div>
+      <div class="cover-title">Mobile Display<br>Mastery Guide</div>
+      <div class="cover-subtitle">மொபைல் டிஸ்ப்ளே முழுமையான கையேடு — Basic to Advanced</div>
+    </div>
+    
+    <div class="cover-body">
+      <div class="cover-icon-box">📱</div>
+      <div class="cover-description">
+        Comprehensive professional handbook covering smartphone display architecture, fault diagnosis, replacement protocols, adhesive chemistry, expert refurbishing techniques, quality grading, and diagnostic matrices.
+      </div>
+
+      <div class="cover-grid">
+        <div class="cover-grid-item">
+          <div class="cover-grid-label">Target Division</div>
+          <div class="cover-grid-value">Display Repair Division</div>
+        </div>
+        <div class="cover-grid-item">
+          <div class="cover-grid-label">Skill Scope</div>
+          <div class="cover-grid-value">Basic → Intermediate → Advanced → Expert</div>
+        </div>
+        <div class="cover-grid-item">
+          <div class="cover-grid-label">Document Version</div>
+          <div class="cover-grid-value">Version 1.0</div>
+        </div>
+        <div class="cover-grid-item">
+          <div class="cover-grid-label">Publication Date</div>
+          <div class="cover-grid-value">July 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div>© 2026 Maha Enics Service Center</div>
+      <div>Internal Training & Reference Document</div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div style="padding-top: 10px;">
+    <h2>📋 Table of Contents</h2>
+    <table class="toc-table">
+      <thead>
+        <tr>
+          <th style="width: 15%;">Part</th>
+          <th style="width: 60%;">Topic</th>
+          <th style="width: 25%;">Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Part A</strong></td>
+          <td>Display Technology Fundamentals — டிஸ்ப்ளே அடிப்படைகள்</td>
+          <td>⭐ Basic</td>
+        </tr>
+        <tr>
+          <td><strong>Part B</strong></td>
+          <td>Display Defects & Diagnosis — குறைபாடுகள் & கண்டறிதல்</td>
+          <td>⭐⭐ Intermediate</td>
+        </tr>
+        <tr>
+          <td><strong>Part C</strong></td>
+          <td>Display Replacement Procedure — மாற்றும் வழிமுறை</td>
+          <td>⭐⭐ Intermediate</td>
+        </tr>
+        <tr>
+          <td><strong>Part D</strong></td>
+          <td>Adhesive Science — ஒட்டும் பொருட்கள் அறிவியல்</td>
+          <td>⭐⭐⭐ Advanced</td>
+        </tr>
+        <tr>
+          <td><strong>Part E</strong></td>
+          <td>Advanced Tricks & Pro Techniques</td>
+          <td>⭐⭐⭐⭐ Expert</td>
+        </tr>
+        <tr>
+          <td><strong>Part F</strong></td>
+          <td>Display Quality Grades — தரம் பிரித்தறிதல்</td>
+          <td>⭐⭐⭐ Advanced</td>
+        </tr>
+        <tr>
+          <td><strong>Part G</strong></td>
+          <td>Quick Reference & Troubleshooting Matrix</td>
+          <td>All Levels</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PART A -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART A: Display Technology Fundamentals</div>
+      <div class="part-subtitle">டிஸ்ப்ளே தொழில்நுட்ப அடிப்படைகள்</div>
+    </div>
+
+    <h2>A1. Display-ல் எத்தனை Layers இருக்கு?</h2>
+    <p>ஒரு smartphone display என்பது ஒரே glass piece இல்லை — அது <strong>பல layers-ன் sandwich</strong>. LCD மற்றும் OLED-ல் layers வேறுபடும்.</p>
+
+    <h3>📱 LCD Display — Layer Structure (மேல் இருந்து கீழ்):</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">Layer #</th>
+          <th style="width: 30%;">Layer Name (English)</th>
+          <th style="width: 32%;">விளக்கம் (Tamil)</th>
+          <th style="width: 30%;">Function</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Cover Glass (Gorilla Glass)</td>
+          <td>பாதுகாப்பு கண்ணாடி</td>
+          <td>Scratch & impact protection</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Touch Digitizer (ITO sensor)</td>
+          <td>டச் சென்சார்</td>
+          <td>Finger touch detect செய்யும்</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>OCA (Optically Clear Adhesive)</td>
+          <td>ஒளியியல் ஒட்டும் படலம்</td>
+          <td>Glass-ஐ display-ல் ஒட்டும்</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Front Polarizer</td>
+          <td>முன் துருவமாக்கி</td>
+          <td>Light filter — contrast improve</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Color Filter</td>
+          <td>நிற வடிகட்டி</td>
+          <td>RGB colors create</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td>Liquid Crystal Layer</td>
+          <td>திரவ படிக அடுக்கு</td>
+          <td>Light-ஐ block/pass செய்யும்</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td>TFT Layer (Thin-Film Transistor)</td>
+          <td>மெல்லிய திரைப்படத் திசைமாற்றி</td>
+          <td>ஒவ்வொரு pixel-ஐயும் control</td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td>Rear Polarizer</td>
+          <td>பின் துருவமாக்கி</td>
+          <td>Backlight-ஐ filter</td>
+        </tr>
+        <tr>
+          <td><strong>9</strong></td>
+          <td>Light Guide Plate</td>
+          <td>ஒளி வழிகாட்டி</td>
+          <td>Backlight-ஐ evenly distribute</td>
+        </tr>
+        <tr>
+          <td><strong>10</strong></td>
+          <td>Backlight (LED array)</td>
+          <td>பின்னொளி</td>
+          <td>White light source — LCD-க்கு அவசியம்</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-note">
+      <strong>LCD-ல் total: ~10 layers</strong>
+    </div>
+
+    <h3>📱 OLED/AMOLED Display — Layer Structure (மேல் இருந்து கீழ்):</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">Layer #</th>
+          <th style="width: 30%;">Layer Name (English)</th>
+          <th style="width: 32%;">விளக்கம் (Tamil)</th>
+          <th style="width: 30%;">Function</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Cover Glass (Gorilla Glass)</td>
+          <td>பாதுகாப்பு கண்ணாடி</td>
+          <td>Scratch & impact protection</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Touch Sensor (On-cell/In-cell)</td>
+          <td>டச் சென்சார்</td>
+          <td>Touch detection — display-ல் integrated</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>OCA/Adhesive</td>
+          <td>ஒளியியல் ஒட்டும் படலம்</td>
+          <td>Bonding layer</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Circular Polarizer</td>
+          <td>வட்ட துருவமாக்கி</td>
+          <td>Internal reflections prevent — true blacks</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Encapsulation (TFE)</td>
+          <td>அடைப்பு அடுக்கு</td>
+          <td>Moisture/oxygen-ல் இருந்து organic materials-ஐ காக்கும்</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td>Cathode (Metal electrode)</td>
+          <td>எதிர்மின்வாய்</td>
+          <td>Electrons inject</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td>Electron Transport Layer (ETL)</td>
+          <td>எலக்ட்ரான் கடத்தி</td>
+          <td>Electrons-ஐ emissive layer-க்கு கடத்தும்</td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td><strong>Emissive Layer (EML)</strong> ❤️</td>
+          <td><strong>ஒளி உமிழும் அடுக்கு</strong></td>
+          <td><strong>இங்கேதான் LIGHT உருவாகிறது!</strong> RGB organic compounds</td>
+        </tr>
+        <tr>
+          <td><strong>9</strong></td>
+          <td>Hole Transport Layer (HTL)</td>
+          <td>நேர்மின் கடத்தி</td>
+          <td>Positive charges-ஐ கடத்தும்</td>
+        </tr>
+        <tr>
+          <td><strong>10</strong></td>
+          <td>Anode (ITO - transparent)</td>
+          <td>நேர்மின்வாய்</td>
+          <td>Holes inject — transparent</td>
+        </tr>
+        <tr>
+          <td><strong>11</strong></td>
+          <td>TFT Backplane (LTPS/LTPO)</td>
+          <td>திசைமாற்றி தளம்</td>
+          <td>ஒவ்வொரு pixel-க்கும் current control</td>
+        </tr>
+        <tr>
+          <td><strong>12</strong></td>
+          <td>Substrate (Polyimide/Glass)</td>
+          <td>அடித்தளம்</td>
+          <td>Foundation — flexible phones-ல் polyimide</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-note">
+      <strong>OLED-ல் total: ~12 layers</strong><br>
+      <strong>முக்கிய வித்தியாசம்:</strong> OLED-ல் <strong>Backlight இல்லை!</strong> ஒவ்வொரு pixel-ம் தானே ஒளி உருவாக்கும் (Self-emissive).
+    </div>
+
+    <h3>🔬 LCD vs OLED — Side-by-Side Comparison:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Feature</th>
+          <th style="width: 37.5%;">LCD (IPS)</th>
+          <th style="width: 37.5%;">OLED (AMOLED)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Light Source</strong></td>
+          <td>External backlight (LED)</td>
+          <td>Self-emissive (each pixel)</td>
+        </tr>
+        <tr>
+          <td><strong>Total Layers</strong></td>
+          <td>~10</td>
+          <td>~12</td>
+        </tr>
+        <tr>
+          <td><strong>Backlight</strong></td>
+          <td>✅ Yes — always ON</td>
+          <td>❌ No backlight needed</td>
+        </tr>
+        <tr>
+          <td><strong>True Black</strong></td>
+          <td>❌ No — grey-ish (backlight bleeds)</td>
+          <td>✅ Yes — pixel turns OFF completely</td>
+        </tr>
+        <tr>
+          <td><strong>Thickness</strong></td>
+          <td>Thicker</td>
+          <td>Thinner</td>
+        </tr>
+        <tr>
+          <td><strong>Power</strong></td>
+          <td>More (backlight always on)</td>
+          <td>Less (black pixels = no power)</td>
+        </tr>
+        <tr>
+          <td><strong>Burn-in Risk</strong></td>
+          <td>❌ None</td>
+          <td>⚠️ Yes — static images degrade pixels</td>
+        </tr>
+        <tr>
+          <td><strong>Colors</strong></td>
+          <td>Accurate, natural</td>
+          <td>Vivid, high contrast</td>
+        </tr>
+        <tr>
+          <td><strong>Viewing Angle</strong></td>
+          <td>Good (IPS)</td>
+          <td>Excellent</td>
+        </tr>
+        <tr>
+          <td><strong>Flexibility</strong></td>
+          <td>Rigid only</td>
+          <td>Can be flexible/foldable</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Lower</td>
+          <td>Higher</td>
+        </tr>
+        <tr>
+          <td><strong>Repairability</strong></td>
+          <td>Glass-only replacement easier</td>
+          <td>Glass-only replacement harder</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>A2. Touch Digitizer — எப்படி work ஆகுது?</h2>
+    <h3>Capacitive Touch Technology:</h3>
+    <p>உங்க விரல் ஒரு <strong>conductor</strong> (மின்கடத்தி). Screen மேல் <strong>Indium Tin Oxide (ITO)</strong> என்ற transparent conductive material coating இருக்கு.</p>
+    <p><strong>Process:</strong></p>
+    <ol>
+      <li>ITO grid-ல் constant electrical field maintain ஆகுது</li>
+      <li>விரல் touch செய்யும்போது, அந்த point-ல் <strong>capacitance மாறும்</strong></li>
+      <li>Touch IC (controller chip) இந்த change-ஐ detect செய்யும்</li>
+      <li>X,Y coordinates-ஐ CPU-க்கு அனுப்பும்</li>
+      <li>CPU appropriate action எடுக்கும்</li>
+    </ol>
+
+    <h3>Touch Types in Smartphone:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Type</th>
+          <th style="width: 50%;">Description</th>
+          <th style="width: 30%;">Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>On-Cell</strong></td>
+          <td>Touch sensor display panel-ன் மேல்</td>
+          <td>Mid-range phones</td>
+        </tr>
+        <tr>
+          <td><strong>In-Cell</strong></td>
+          <td>Touch sensor display panel-ன் உள்ளே integrated</td>
+          <td>Premium phones (thinner)</td>
+        </tr>
+        <tr>
+          <td><strong>Out-Cell (OGS)</strong></td>
+          <td>Touch sensor separate glass-ல்</td>
+          <td>Budget / older phones</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-note">
+      <strong>ℹ️ NOTE:</strong> <strong>In-Cell technology</strong> LCD-ல் touch sensor-ஐ display panel-ன் உள்ளேயே integrate செய்யும். இதனால் display thinner ஆகும், ஆனால் glass-only repair சாத்தியமில்லை — full assembly மாற்ற வேண்டும்.
+    </div>
+  </div>
+
+  <!-- PART B -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART B: Display Defects &amp; Diagnosis</div>
+      <div class="part-subtitle">டிஸ்ப்ளே குறைபாடுகள் &amp; கண்டறிதல்</div>
+    </div>
+
+    <h2>B1. White Dot / Spot — வெள்ளை புள்ளி</h2>
+    <div class="customer-quote">🗣️ Customer: "ஸ்கிரீன்ல ஒரு வெள்ளை புள்ளி தெரியுது"</div>
+
+    <h3>காரணங்கள்:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Cause</th>
+          <th style="width: 20%;">Type</th>
+          <th style="width: 55%;">விளக்கம்</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Accessibility Feature</strong></td>
+          <td>Software</td>
+          <td>AssistiveTouch / Accessibility Menu enabled — Settings-ல் check</td>
+        </tr>
+        <tr>
+          <td><strong>Screen Protector</strong></td>
+          <td>External</td>
+          <td>Air bubble / dust under protector</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure Damage</strong></td>
+          <td>Hardware</td>
+          <td>Pocket-ல் அழுத்தம், heavy object வைத்தது — LCD layers shift</td>
+        </tr>
+        <tr>
+          <td><strong>Backlight Bleed</strong> (LCD only)</td>
+          <td>Hardware</td>
+          <td>Diffuser/reflector layer shifted — light uneven-ஆ leak</td>
+        </tr>
+        <tr>
+          <td><strong>Stuck Pixel</strong></td>
+          <td>Hardware</td>
+          <td>Pixel "ON" position-ல் stuck — white/colored dot</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>கண்டறிதல் (Diagnosis):</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Test</th>
+          <th style="width: 45%;">Method</th>
+          <th style="width: 45%;">Result Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Settings &gt; Accessibility check</td>
+          <td>Software feature = disable செய்யுங்கள்</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Screen protector remove</td>
+          <td>Protector issue = replace protector</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Solid white/black/RGB backgrounds display</td>
+          <td>Stuck pixel = color-specific dot; Panel damage = cloudy patch</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Different viewing angles check</td>
+          <td>Panel damage = angle-independent; Surface issue = angle-dependent</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Fix ஆகுமா?</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 35%;">Type</th>
+          <th style="width: 20%;">Fixable?</th>
+          <th style="width: 45%;">Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Software feature (AssistiveTouch)</td>
+          <td>✅ Yes</td>
+          <td>Settings-ல் disable</td>
+        </tr>
+        <tr>
+          <td>Screen protector bubble</td>
+          <td>✅ Yes</td>
+          <td>Remove/replace protector</td>
+        </tr>
+        <tr>
+          <td><strong>Stuck pixel</strong></td>
+          <td>⚠️ Sometimes</td>
+          <td>Pixel refresh apps (JScreenFix) — 10-60 min color cycling</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure/panel damage</strong></td>
+          <td>❌ <strong>No</strong></td>
+          <td><strong>Display replacement only</strong> — irreversible</td>
+        </tr>
+        <tr>
+          <td><strong>Backlight bleed</strong></td>
+          <td>❌ <strong>No</strong></td>
+          <td><strong>Display replacement only</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-warning">
+      <strong>⚠️ WARNING:</strong> <strong>வெள்ளை புள்ளியை "massage" செய்து சரி பண்ண முயற்சிக்காதீர்கள்!</strong> Internal glass crack ஆகி, damage worse ஆகும்.
+    </div>
+
+    <h2>B2. Black Dot / Spot — கருப்பு புள்ளி</h2>
+    <div class="customer-quote">🗣️ Customer: "ஸ்கிரீன்ல கருப்பு புள்ளி/கறை தெரியுது"</div>
+
+    <h3>வகைகள் &amp; Fix:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Type</th>
+          <th style="width: 20%;">Appearance</th>
+          <th style="width: 25%;">Cause</th>
+          <th style="width: 15%;">Fixable?</th>
+          <th style="width: 20%;">Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dead Pixel</strong></td>
+          <td>Tiny single black dot</td>
+          <td>Pixel circuit dead — no power</td>
+          <td>❌ <strong>No</strong> (rare fix with pressure)</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Stuck Pixel (dark)</strong></td>
+          <td>Small colored/dark dot</td>
+          <td>Pixel stuck in OFF state</td>
+          <td>⚠️ Sometimes</td>
+          <td>Pixel refresh app — color cycling 10-60 min</td>
+        </tr>
+        <tr>
+          <td><strong>Ink Stain / Bleed</strong></td>
+          <td>Spreading black patch like ink</td>
+          <td>Physical trauma — drop, pressure, moisture</td>
+          <td>❌ <strong>No — and it SPREADS</strong></td>
+          <td><strong>Urgent display replacement</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Debris under glass</strong></td>
+          <td>Small dark speck</td>
+          <td>Dust particle between layers</td>
+          <td>❌ <strong>No</strong> (for bonded displays)</td>
+          <td>Display replacement or refurbishment</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-caution">
+      <strong>🚨 CRITICAL WARNING — Ink Stain:</strong><br>
+      <strong>"Ink stain" type black spot பரவும் (spreads)!</strong> இது progressive damage. இன்று சிறியதாக இருக்கும், நாளை full screen-ஐ cover செய்யும். Customer-க்கு <strong>உடனடி display replacement</strong> recommend செய்யுங்கள். Data backup first!
+    </div>
+
+    <h3>Stuck vs Dead Pixel — எப்படி வேறுபடுத்துவது:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Test</th>
+          <th style="width: 35%;">Stuck Pixel</th>
+          <th style="width: 35%;">Dead Pixel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Solid white background</td>
+          <td>Visible as colored dot</td>
+          <td>Visible as black dot</td>
+        </tr>
+        <tr>
+          <td>Solid black background</td>
+          <td>Still visible (lit up)</td>
+          <td>Not visible (blends in)</td>
+        </tr>
+        <tr>
+          <td>Color cycling test</td>
+          <td>May change color</td>
+          <td>Stays black always</td>
+        </tr>
+        <tr>
+          <td>Pixel refresh app</td>
+          <td>May respond</td>
+          <td>No response</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>B3. Green Line — பச்சை கோடு</h2>
+    <div class="customer-quote">🗣️ Customer: "ஸ்கிரீன்ல ஒரு பச்சை கோடு வந்திருச்சு"</div>
+
+    <div class="alert-box alert-important">
+      <strong>📌 IMPORTANT:</strong> <strong>Green line = Hardware failure.</strong> Software update-க்கு பிறகு வந்தாலும், root cause hardware-தான். Update process-ல் ஏற்படும் heat, already-weak connections-ஐ fail செய்கிறது.
+    </div>
+
+    <h3>காரணங்கள்:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 35%;">Cause</th>
+          <th style="width: 65%;">Explanation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Display Driver / Flex Cable Failure</strong></td>
+          <td>OLED screen ultra-thin ribbon cables (ACF bonding) thermal stress-ல் expand/contract ஆகி connection break</td>
+        </tr>
+        <tr>
+          <td><strong>Thermal Stress</strong></td>
+          <td>Heavy usage, fast charging, software update → heat → solder joint loosen</td>
+        </tr>
+        <tr>
+          <td><strong>Physical Impact</strong></td>
+          <td>Drop, pressure, tight case → microscopic circuit damage</td>
+        </tr>
+        <tr>
+          <td><strong>Manufacturing Defect</strong></td>
+          <td>Factory-ல் weak traces / poor bonding → time-over degradation</td>
+        </tr>
+        <tr>
+          <td><strong>Moisture Ingress</strong></td>
+          <td>Water damage → corrosion on display flex cable contacts</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>ஏன் Green Color மட்டும்?</h3>
+    <p>Display-ல் ஒவ்வொரு pixel-லும் <strong>Red, Green, Blue (RGB)</strong> sub-pixels இருக்கு. <strong>Green sub-pixels</strong> மற்றவற்றைவிட <strong>more sensitive</strong> — different voltage requirements. Column/row signal interrupt ஆனால் green pixels "max brightness" state-ல் stuck ஆகும்.</p>
+
+    <h3>Fix ஆகுமா?</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Method</th>
+          <th style="width: 25%;">Success Rate</th>
+          <th style="width: 45%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Restart</td>
+          <td>⚠️ Very rare</td>
+          <td>Temporary glitch clear ஆகலாம்</td>
+        </tr>
+        <tr>
+          <td>Safe Mode</td>
+          <td>⚠️ Very rare</td>
+          <td>Software conflict rule out</td>
+        </tr>
+        <tr>
+          <td>Diagnostic (*#0*# Samsung)</td>
+          <td>—</td>
+          <td>Hardware confirm — line persists in test</td>
+        </tr>
+        <tr>
+          <td>Factory Reset</td>
+          <td>❌ Almost never</td>
+          <td>Physical damage-க்கு software fix இல்லை</td>
+        </tr>
+        <tr>
+          <td><strong>Display Replacement</strong></td>
+          <td>✅ <strong>Only permanent fix</strong></td>
+          <td>Full display assembly change</td>
+        </tr>
+        <tr>
+          <td><strong>Laser/ACF Repair</strong> (Advanced shops)</td>
+          <td>⚠️ Specialist only</td>
+          <td>Micro-connections repair without panel change — very rare skill</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Customer-க்கு சொல்ல வேண்டியது:</h3>
+    <ul>
+      <li>"இது hardware problem. Display மாற்ற வேண்டும்"</li>
+      <li>"Phone heavy-ஆ use பண்ணாதீங்க — line multiply ஆகலாம்"</li>
+      <li>"Data backup பண்ணிக்கோங்க — screen fully fail ஆகலாம்"</li>
+      <li>"Warranty check பண்ணுங்க — சில companies free replacement கொடுக்கும்"</li>
+    </ul>
+
+    <h2>B4. Ghost Touch / Auto Touch — தானாகவே டச் ஆகுது</h2>
+    <div class="customer-quote">🗣️ Customer: "ஸ்கிரீன் தானா டச் ஆகுது, apps open ஆகுது"</div>
+
+    <h3>காரணங்கள்:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Cause</th>
+          <th style="width: 15%;">Type</th>
+          <th style="width: 60%;">Explanation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Faulty Charger</strong></td>
+          <td>External</td>
+          <td>Non-original charger → EMI interference → ghost touch while charging only</td>
+        </tr>
+        <tr>
+          <td><strong>Dirty Screen</strong></td>
+          <td>External</td>
+          <td>Moisture, oil, sweat on screen</td>
+        </tr>
+        <tr>
+          <td><strong>Screen Protector</strong></td>
+          <td>External</td>
+          <td>Poor quality protector interfering with capacitive sensor</td>
+        </tr>
+        <tr>
+          <td><strong>Grounding Issue</strong></td>
+          <td>Hardware</td>
+          <td>Display frame grounding lost → static charge buildup</td>
+        </tr>
+        <tr>
+          <td><strong>Flex Cable Problem</strong></td>
+          <td>Hardware</td>
+          <td>Loose/corroded connector, pinched cable, torn insulation</td>
+        </tr>
+        <tr>
+          <td><strong>EMI Interference</strong></td>
+          <td>Hardware</td>
+          <td>Poor shielding → electrical noise → false touch signals</td>
+        </tr>
+        <tr>
+          <td><strong>Bent Grounding Pins</strong></td>
+          <td>Hardware</td>
+          <td>Drop → pins bend → puncture flex cable insulating tape</td>
+        </tr>
+        <tr>
+          <td><strong>Low-Quality Screen</strong></td>
+          <td>Hardware</td>
+          <td>Third-party replacement screen → poor touch controller</td>
+        </tr>
+        <tr>
+          <td><strong>Software Bug</strong></td>
+          <td>Software</td>
+          <td>Rare — OS/touch driver glitch</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Quick Diagnosis:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 40%;">Test</th>
+          <th style="width: 15%;">Result</th>
+          <th style="width: 45%;">Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ghost touch while charging only?</td>
+          <td>Yes</td>
+          <td><strong>Charger fault</strong> — use original charger</td>
+        </tr>
+        <tr>
+          <td>Remove screen protector → test</td>
+          <td>Fixed</td>
+          <td><strong>Protector issue</strong></td>
+        </tr>
+        <tr>
+          <td>Remove phone case → test</td>
+          <td>Fixed</td>
+          <td><strong>Case interfering</strong> with touch</td>
+        </tr>
+        <tr>
+          <td>Safe mode → test</td>
+          <td>Fixed</td>
+          <td><strong>App conflict</strong></td>
+        </tr>
+        <tr>
+          <td>Different charger → test</td>
+          <td>Fixed</td>
+          <td><strong>Charger EMI</strong></td>
+        </tr>
+        <tr>
+          <td>Still happens without accessories</td>
+          <td>—</td>
+          <td><strong>Hardware fault</strong> — internal inspection needed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Hardware Fix Steps:</h3>
+    <ol>
+      <li><strong>Display connector re-seat</strong> — disconnect, clean contacts with IPA, reconnect firmly</li>
+      <li><strong>Check all internal screws</strong> — screws complete the ground circuit between display and frame</li>
+      <li><strong>Inspect flex cable</strong> — look for tears, pinches, corrosion</li>
+      <li><strong>Add Kapton tape</strong> — where flex cable touches metal frame (insulation)</li>
+      <li><strong>Check bent grounding pins</strong> — ensure pins don't puncture insulation tape</li>
+      <li><strong>Test I2C lines</strong> (Advanced) — SDA/SCL signal stability between touch IC and CPU</li>
+      <li><strong>Replace display</strong> — if all else fails, the touch controller on the display may be faulty</li>
+    </ol>
+
+    <h2>B5. OLED Burn-in — ஸ்கிரீன் எரிப்பு</h2>
+    <div class="customer-quote">🗣️ Customer: "ஸ்கிரீன்ல keyboard/status bar shadow தெரியுது"</div>
+
+    <h3>Temporary vs Permanent:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Type</th>
+          <th style="width: 25%;">Duration</th>
+          <th style="width: 15%;">Fixable?</th>
+          <th style="width: 30%;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Image Retention</strong> (temporary)</td>
+          <td>Fades in minutes/hours</td>
+          <td>✅ Yes</td>
+          <td>Display varied content, lower brightness</td>
+        </tr>
+        <tr>
+          <td><strong>Burn-in</strong> (permanent)</td>
+          <td>Never fades</td>
+          <td>❌ <strong>No</strong></td>
+          <td><strong>Display replacement only</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Test:</strong> Solid gray background display → if shadow visible = burn-in confirmed.</p>
+
+    <h3>Prevention Tips (Customer-க்கு சொல்லுங்க):</h3>
+    <ul>
+      <li>Brightness 50%-க்கு கீழ் maintain</li>
+      <li>Dark mode use</li>
+      <li>Screen timeout 30 sec-1 min</li>
+      <li>Gesture navigation use (static buttons avoid)</li>
+      <li>AOD (Always-On Display) moving mode use</li>
+      <li>Static content long time display avoid</li>
+    </ul>
+
+    <h2>B6. Color Tint After Replacement — கலர் மாறுதல்</h2>
+    <div class="customer-quote">🗣️ Customer: "Display மாற்றிய பிறகு yellow/blue tint வருது"</div>
+
+    <h3>Diagnosis &amp; Fix:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Cause</th>
+          <th style="width: 30%;">Check</th>
+          <th style="width: 40%;">Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Night Mode / Blue Light Filter ON</td>
+          <td>Settings &gt; Display</td>
+          <td>Disable filter</td>
+        </tr>
+        <tr>
+          <td>Color Temperature setting</td>
+          <td>Settings &gt; Display &gt; Color Mode</td>
+          <td>Adjust Cool/Warm slider</td>
+        </tr>
+        <tr>
+          <td>Accessibility Color Correction</td>
+          <td>Settings &gt; Accessibility</td>
+          <td>Disable</td>
+        </tr>
+        <tr>
+          <td>Low-quality replacement screen</td>
+          <td>Compare with similar phone</td>
+          <td>Replace with better quality screen</td>
+        </tr>
+        <tr>
+          <td>Flex cable not seated properly</td>
+          <td>Internal inspection</td>
+          <td>Re-seat display connector</td>
+        </tr>
+        <tr>
+          <td>Calibration needed</td>
+          <td>Manufacturer tool</td>
+          <td>Use Self Repair Assistant (Samsung) etc.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PART C -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART C: Display Replacement Procedure</div>
+      <div class="part-subtitle">டிஸ்ப்ளே மாற்றும் வழிமுறை</div>
+    </div>
+
+    <h2>C1. Before You Start — தயாரிப்பு</h2>
+    <h3>✅ Pre-Replacement Checklist:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">#</th>
+          <th style="width: 50%;">Item</th>
+          <th style="width: 42%;">ஏன்?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Customer data backup confirm</td>
+          <td>Data loss prevent</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Phone condition photos (incoming)</td>
+          <td>Legal protection</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>IMEI note down</td>
+          <td>Device identification</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Battery charge &lt; 25%</td>
+          <td>Safety — puncture risk reduce</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Power OFF completely</td>
+          <td>Short circuit prevent</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>SIM/SD card remove</td>
+          <td>Loss/damage prevent</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Clean workspace, magnetic mat ready</td>
+          <td>Organized workflow</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Correct replacement display verify</td>
+          <td>Model match confirm</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>ESD wrist strap wear</td>
+          <td>Static damage prevent</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>C2. Step-by-Step Display Replacement</h2>
+    <h3>Phase 1: Device Opening (கருவி திறத்தல்)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Step</th>
+          <th style="width: 45%;">Action</th>
+          <th style="width: 45%;">⚠️ Caution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Back panel-ன் edges-ல் heat apply (80-100°C)</td>
+          <td>130°C மேல் போகாதீர்கள் — OLED polarizer damage</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Suction cup + thin plastic pry tool use</td>
+          <td>Metal tools use செய்யாதீர்கள்</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Slowly separate — thin plastic card slide around edges</td>
+          <td>Force apply செய்யாதீர்கள் — more heat use</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Internal screws remove — photo எடுத்து organize</td>
+          <td>Screw locations note — different lengths exist</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 2: Internal Disconnection (உள் இணைப்பு துண்டித்தல்)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Step</th>
+          <th style="width: 45%;">Action</th>
+          <th style="width: 45%;">⚠️ Caution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>5</td>
+          <td><strong>Battery connector FIRST disconnect</strong></td>
+          <td>🚨 <strong>இது #1 Rule — Battery first!</strong> Short circuit prevent</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Display flex cable connectors disconnect</td>
+          <td>Plastic spudger only — never metal</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Other flex cables note &amp; disconnect if needed</td>
+          <td>Photos take for reference</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Display assembly remove from frame</td>
+          <td>Gentle — heat edges if adhesive tight</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 3: Pre-Installation Test (முன் சோதனை) ⭐ CRITICAL</h3>
+    <div class="alert-box alert-important">
+      <strong>📌 IMPORTANT:</strong> <strong>இது மிகவும் முக்கியம்!</strong> Adhesive apply செய்வதற்கு <strong>முன்பே</strong> new display-ஐ test செய்யுங்கள்.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Step</th>
+          <th style="width: 45%;">Action</th>
+          <th style="width: 45%;">What to Check</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>9</td>
+          <td>New display flex cables connect (temporary)</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Battery reconnect temporarily</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Power ON &amp; test</td>
+          <td>
+            ✅ Display quality — dead pixels, lines, flickering<br>
+            ✅ Touch — all corners, edges, center<br>
+            ✅ Brightness — full range<br>
+            ✅ Color accuracy<br>
+            ✅ Sensors — proximity, fingerprint (if under-display)
+          </td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Power OFF &amp; disconnect</td>
+          <td>Proceed to installation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 4: Installation (நிறுவுதல்)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Step</th>
+          <th style="width: 45%;">Action</th>
+          <th style="width: 45%;">⚠️ Caution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>13</td>
+          <td><strong>Old adhesive 100% remove</strong> from frame</td>
+          <td>IPA 90%+ use — every corner clean</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>Frame inspect — bends/warping?</td>
+          <td>Bent frame = display never sits flush</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Check no internal cables/screws protruding</td>
+          <td>Even tiny protrusion = display gap</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>Apply adhesive (B-7000/T-7000/pre-cut strips)</td>
+          <td>Thin, even bead — excess = problems</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>Align display carefully — seat into frame</td>
+          <td>Press edges gently, evenly</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>Reconnect all flex cables firmly</td>
+          <td>Alignment first, then press</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>Reconnect battery</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>Clamp or rubber band for curing</td>
+          <td>30-60 min minimum — <strong>24-48 hrs full cure</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 5: Final Testing (இறுதி சோதனை)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 50%;">Test Item</th>
+          <th style="width: 50%;">✅ Check</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Display ON &amp; quality</td>
+          <td>Dead pixels, lines, flickering — NONE</td>
+        </tr>
+        <tr>
+          <td>Touch all areas</td>
+          <td>All corners, edges, center responsive</td>
+        </tr>
+        <tr>
+          <td>Brightness full range</td>
+          <td>Min to Max smooth</td>
+        </tr>
+        <tr>
+          <td>Auto-brightness</td>
+          <td>Working</td>
+        </tr>
+        <tr>
+          <td>Proximity sensor</td>
+          <td>Call test — screen off near ear</td>
+        </tr>
+        <tr>
+          <td>Fingerprint (under-display)</td>
+          <td>Registration + unlock test</td>
+        </tr>
+        <tr>
+          <td>Face ID / Face unlock</td>
+          <td>If applicable</td>
+        </tr>
+        <tr>
+          <td>Front camera</td>
+          <td>Not blocked by display</td>
+        </tr>
+        <tr>
+          <td>Earpiece speaker</td>
+          <td>Sound quality during call</td>
+        </tr>
+        <tr>
+          <td>Screen rotation</td>
+          <td>Gyroscope working</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PART D -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART D: Adhesive Science</div>
+      <div class="part-subtitle">ஒட்டும் பொருட்கள் அறிவியல்</div>
+    </div>
+
+    <h2>D1. Display Adhesive Types — Complete Guide</h2>
+    <h3>1. Frame Adhesives (Glass-to-Frame ஒட்டுவது):</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Adhesive</th>
+          <th style="width: 15%;">Color</th>
+          <th style="width: 25%;">Best For</th>
+          <th style="width: 20%;">Cure Time</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>B-7000</strong></td>
+          <td>Transparent</td>
+          <td>Light/white frames</td>
+          <td>24-48 hrs full cure</td>
+          <td>Most popular all-rounder</td>
+        </tr>
+        <tr>
+          <td><strong>T-7000</strong></td>
+          <td>Black</td>
+          <td>Black frames/bezels</td>
+          <td>24-48 hrs full cure</td>
+          <td>Blends with black housing</td>
+        </tr>
+        <tr>
+          <td><strong>T-8000</strong></td>
+          <td>Transparent</td>
+          <td>Precision, delicate work</td>
+          <td>24-48 hrs full cure</td>
+          <td>Low-odor, professional grade</td>
+        </tr>
+        <tr>
+          <td><strong>E-8000</strong></td>
+          <td>Transparent</td>
+          <td>High-end repairs</td>
+          <td>24-48 hrs full cure</td>
+          <td>Enhanced formula</td>
+        </tr>
+        <tr>
+          <td><strong>Pre-cut adhesive strips</strong></td>
+          <td>—</td>
+          <td>Clean, mess-free bond</td>
+          <td>Instant handling</td>
+          <td>OEM-style — best for consistency</td>
+        </tr>
+        <tr>
+          <td><strong>2UUL G301/G302</strong></td>
+          <td>—</td>
+          <td>Narrow-bezel phones</td>
+          <td>—</td>
+          <td>Cold press — easy future re-repair</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>❌ NEVER Use:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">❌ Adhesive</th>
+          <th style="width: 70%;">⚠️ ஏன் கூடாது</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Super Glue (cyanoacrylate)</td>
+          <td>Too brittle, damages LCD/plastic, future repair impossible</td>
+        </tr>
+        <tr>
+          <td>Feviquick / Instant glue</td>
+          <td>Same problems — permanent bond — no rework possible</td>
+        </tr>
+        <tr>
+          <td>Regular double-sided tape</td>
+          <td>Not heat resistant, not optically clear, peels off</td>
+        </tr>
+        <tr>
+          <td>Hot glue</td>
+          <td>Too thick, melts internal components, unprofessional</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-tip">
+      <strong>💡 Pro Tip — Color Match Rule:</strong> White/light frame → <strong>B-7000</strong> (transparent). Black frame → <strong>T-7000</strong> (black). Glue residue invisible.
+    </div>
+
+    <div class="alert-box alert-tip">
+      <strong>💡 Pro Tip — Thin Bead Rule:</strong> Less is more. Too much glue → display sits up (gap) + light leaks from edges + glue seeps into internal components. Thin, consistent line around perimeter only.
+    </div>
+
+    <div class="alert-box alert-tip">
+      <strong>💡 Pro Tip — Curing Rule:</strong> Set ≠ Cured. Initial set = 3-6 minutes. <strong>Full strength = 24-48 hours.</strong> Use clamps/rubber bands during curing.
+    </div>
+
+    <h3>2. OCA vs LOCA — Glass-to-Display Bonding:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 22%;">Feature</th>
+          <th style="width: 39%;">OCA (Film)</th>
+          <th style="width: 39%;">LOCA (Liquid UV Glue)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Form</strong></td>
+          <td>Solid dry film (double-sided)</td>
+          <td>Liquid resin — UV cured</td>
+        </tr>
+        <tr>
+          <td><strong>Application</strong></td>
+          <td>Vacuum lamination machine</td>
+          <td>Manual dispensing + UV lamp</td>
+        </tr>
+        <tr>
+          <td><strong>Precision</strong></td>
+          <td>Very high — factory grade</td>
+          <td>Lower — messy</td>
+        </tr>
+        <tr>
+          <td><strong>Bubble risk</strong></td>
+          <td>Low (vacuum process)</td>
+          <td>Higher (manual process)</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Flat screens, mass production, refurbishing</td>
+          <td>Curved screens, irregular surfaces</td>
+        </tr>
+        <tr>
+          <td><strong>Equipment needed</strong></td>
+          <td>Lamination machine + bubble remover</td>
+          <td>UV lamp only</td>
+        </tr>
+        <tr>
+          <td><strong>Seepage risk</strong></td>
+          <td>None (solid film)</td>
+          <td>HIGH — liquid can flow into backlight/buttons</td>
+        </tr>
+        <tr>
+          <td><strong>Rework</strong></td>
+          <td>Easier (heat to soften)</td>
+          <td>Harder (UV-cured permanent)</td>
+        </tr>
+        <tr>
+          <td><strong>Yellow over time</strong></td>
+          <td>No</td>
+          <td>Yes — if low-quality or bad UV cure</td>
+        </tr>
+        <tr>
+          <td><strong>Industry standard</strong></td>
+          <td>✅ OEM / Professional</td>
+          <td>⚠️ Niche / Older technology</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-important">
+      <strong>📌 IMPORTANT:</strong> <strong>Professional recommendation: OCA &gt; LOCA</strong> for most repairs. LOCA only for special curved screen situations.
+    </div>
+
+    <h2>D2. Tape Types — When &amp; Where to Use</h2>
+    <h3>Complete Tape Guide:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 22%;">Tape Type</th>
+          <th style="width: 25%;">Properties</th>
+          <th style="width: 28%;">Use In Display Repair</th>
+          <th style="width: 25%;">⚠️ Warning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Kapton (Polyimide)</strong></td>
+          <td>Heat resistant, electrical insulator, no residue</td>
+          <td>Flex cable protection, heat shielding, insulation between cable &amp; metal frame</td>
+          <td>Gold standard — always keep in stock</td>
+        </tr>
+        <tr>
+          <td><strong>Copper Tape</strong></td>
+          <td>Conductive, EMI/RFI shielding</td>
+          <td>Grounding, shielding from interference</td>
+          <td>⚠️ <strong>Conductive! Wrong placement = short circuit</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Tesa Tape</strong> (Electronics grade)</td>
+          <td>Thin, strong adhesive, clean removal</td>
+          <td>Display-to-frame bonding, component securing</td>
+          <td>Industry standard for OEM-style work</td>
+        </tr>
+        <tr>
+          <td><strong>Double-Sided Tape</strong></td>
+          <td>Adhesive both sides</td>
+          <td>Display mounting (if pre-cut strips not available)</td>
+          <td>Use electronics-grade only — correct thickness critical</td>
+        </tr>
+        <tr>
+          <td><strong>Black insulating tape</strong></td>
+          <td>Electrical insulation</td>
+          <td>Cable routing, general insulation</td>
+          <td>Leaves residue — not for precision work</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Double-Sided Tape — Display பின்னால் ஒட்டலாமா?</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Scenario</th>
+          <th style="width: 35%;">✅ ஒட்டலாம்</th>
+          <th style="width: 35%;">❌ ஒட்டக்கூடாது</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Frame edges-ல்</td>
+          <td>✅ Yes — proper positioning</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Display panel back-ல் full coverage</td>
+          <td>—</td>
+          <td>❌ <strong>No!</strong> Pressure on OLED/LCD → damage over time</td>
+        </tr>
+        <tr>
+          <td>Thin OLED modules</td>
+          <td>—</td>
+          <td>❌ <strong>No!</strong> Excessive pressure → display defects</td>
+        </tr>
+        <tr>
+          <td>Original-style die-cut tape</td>
+          <td>✅ Best option</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Generic craft tape</td>
+          <td>—</td>
+          <td>❌ Not heat/chemical resistant</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-caution">
+      <strong>🚨 CAUTION:</strong> <strong>OLED display பின்னால் thick double-sided tape ஒட்டாதீர்கள்!</strong> OLED panels ultra-thin, pressure-sensitive. Thick tape → uneven pressure → white spots / dead pixels over time.
+    </div>
+
+    <h3>Kapton Tape — Advanced Usage:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Usage</th>
+          <th style="width: 40%;">How</th>
+          <th style="width: 35%;">Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Flex cable insulation</td>
+          <td>Wrap around flex where it touches metal frame</td>
+          <td>Prevent short circuit / ghost touch</td>
+        </tr>
+        <tr>
+          <td>Heat protection during soldering</td>
+          <td>Cover nearby components with Kapton</td>
+          <td>Components won't get heat damage</td>
+        </tr>
+        <tr>
+          <td>Securing cables in safe position</td>
+          <td>Tack cable away from work area</td>
+          <td>Prevent accidental damage</td>
+        </tr>
+        <tr>
+          <td>Strain relief</td>
+          <td>Apply at cable bend points</td>
+          <td>Prevent micro-fractures in copper traces</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PART E -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART E: Advanced Tricks &amp; Pro Techniques</div>
+      <div class="part-subtitle">⭐⭐⭐⭐ Expert Level Tricks</div>
+    </div>
+
+    <h2>E1. Glass-Only Replacement (Refurbishing) — கண்ணாடி மட்டும் மாற்றுதல்</h2>
+    <h3>When possible:</h3>
+    <ul>
+      <li>Display (LCD/OLED) image perfectly working</li>
+      <li>Touch working properly</li>
+      <li>Only outer glass cracked</li>
+    </ul>
+
+    <h3>Professional Process:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">Step</th>
+          <th style="width: 27%;">Equipment</th>
+          <th style="width: 40%;">Details</th>
+          <th style="width: 25%;">⚠️ Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>LCD Separator (Heating Plate)</strong></td>
+          <td>Heat display to soften adhesive (80-100°C)</td>
+          <td>Temperature control critical</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Molybdenum Wire (0.03-0.05mm)</strong></td>
+          <td>Slide between glass &amp; display panel</td>
+          <td>Wire angle &lt; 30° — prevent polarizer cut</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Adhesive Remover (X11 liquid)</strong></td>
+          <td>Clean old OCA from display surface</td>
+          <td>Lint-free environment essential</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Dust Roller / Laminar Flow Hood</strong></td>
+          <td>Remove all dust particles</td>
+          <td>Single dust particle = visible defect</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>New OCA Sheet</strong></td>
+          <td>Apply to new glass or display panel</td>
+          <td>Correct size, no wrinkles</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>OCA Lamination Machine</strong></td>
+          <td>Vacuum + pressure bonding</td>
+          <td>Perfect alignment required</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Autoclave (Bubble Remover)</strong></td>
+          <td>High pressure removes micro-bubbles</td>
+          <td>Factory-grade finish</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Wire Separation — Advanced Technique:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Parameter</th>
+          <th style="width: 35%;">Recommended</th>
+          <th style="width: 40%;">⚠️ Wrong Approach</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wire type</td>
+          <td>Molybdenum 0.03-0.05mm</td>
+          <td>Fishing line, razor blade ❌</td>
+        </tr>
+        <tr>
+          <td>Wire angle to surface</td>
+          <td>&lt; 30 degrees</td>
+          <td>&gt; 45° → cuts into polarizer ❌</td>
+        </tr>
+        <tr>
+          <td>Speed</td>
+          <td>Slow, consistent</td>
+          <td>Fast/jerky → panel crack ❌</td>
+        </tr>
+        <tr>
+          <td>Lubrication</td>
+          <td>X11 adhesive remover</td>
+          <td>Dry cutting → friction damage ❌</td>
+        </tr>
+        <tr>
+          <td>Direction</td>
+          <td>Always pull toward you</td>
+          <td>Push → wire snaps ❌</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>E2. Factory-Quality Finish — Original போல் மாற்றுவது</h2>
+    <h3>The "Gap-Free" Installation Method:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">#</th>
+          <th style="width: 47%;">Technique</th>
+          <th style="width: 45%;">Why It Works</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>100% old adhesive removal</strong> — IPA 90%+</td>
+          <td>Any residue = uneven seating = gap</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Frame straightness check</strong> — flat surface test</td>
+          <td>Bent frame = display never fits flush</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Internal component clearance</strong> — screws, cables flush</td>
+          <td>Any protrusion pushes display out</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Pre-cut adhesive strips</strong> over liquid glue</td>
+          <td>Consistent thickness = uniform bond</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Pre-installation test</strong> before gluing</td>
+          <td>No rework needed = cleaner job</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Alignment jig</strong> if available</td>
+          <td>Perfect positioning every time</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Uniform edge pressure</strong> during curing</td>
+          <td>Clamps or rubber bands — 30-60 min</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Quality replacement parts</strong> (not cheap copies)</td>
+          <td>Cheap copies = wrong dimensions = gaps</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Common Reasons for "Not Looking Original":</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Problem</th>
+          <th style="width: 35%;">Cause</th>
+          <th style="width: 40%;">Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gap between glass &amp; frame</td>
+          <td>Old adhesive residue / bent frame / excess glue</td>
+          <td>Clean thoroughly / straighten frame / less glue</td>
+        </tr>
+        <tr>
+          <td>Display sits higher than frame</td>
+          <td>Too much adhesive / wrong display size</td>
+          <td>Thinner adhesive application / correct part</td>
+        </tr>
+        <tr>
+          <td>Light leaking from edges</td>
+          <td>Insufficient adhesive / gaps</td>
+          <td>Re-apply adhesive evenly</td>
+        </tr>
+        <tr>
+          <td>Uneven edges</td>
+          <td>Poor alignment during installation</td>
+          <td>Re-position before glue sets</td>
+        </tr>
+        <tr>
+          <td>Display lifts after few days</td>
+          <td>Poor adhesive / no curing time</td>
+          <td>Quality adhesive + 24-48 hr cure time</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>E3. Heat Gun Mastery — Temperature Settings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Phone Area</th>
+          <th style="width: 20%;">Temperature</th>
+          <th style="width: 25%;">Distance</th>
+          <th style="width: 25%;">Duration Per Spot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Back glass removal</td>
+          <td>80-100°C</td>
+          <td>10-15 cm</td>
+          <td>30-60 seconds</td>
+        </tr>
+        <tr>
+          <td>Display edge softening</td>
+          <td>80-90°C</td>
+          <td>10-15 cm</td>
+          <td>20-30 seconds</td>
+        </tr>
+        <tr>
+          <td>Battery adhesive</td>
+          <td>60-70°C</td>
+          <td>15-20 cm</td>
+          <td>15-20 seconds</td>
+        </tr>
+        <tr>
+          <td>Flex cable area</td>
+          <td>❌ AVOID</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Near OLED polarizer</td>
+          <td>Max 80°C</td>
+          <td>15+ cm</td>
+          <td>&lt; 10 seconds</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box alert-warning">
+      <strong>⚠️ WARNING — Temperature Danger Zones:</strong>
+      <ul>
+        <li><strong>&gt;100°C near OLED</strong> → Polarizer discoloration (permanent yellow/brown tint)</li>
+        <li><strong>&gt;130°C anywhere</strong> → Plastic component warping</li>
+        <li><strong>&gt;150°C near battery</strong> → 🚨 <strong>THERMAL RUNAWAY RISK — FIRE/EXPLOSION</strong></li>
+      </ul>
+    </div>
+
+    <h3>Heating Pad vs Heat Gun:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Feature</th>
+          <th style="width: 40%;">Heating Pad</th>
+          <th style="width: 40%;">Heat Gun</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Heat distribution</td>
+          <td>✅ Even</td>
+          <td>⚠️ Uneven (hot spot)</td>
+        </tr>
+        <tr>
+          <td>Temperature control</td>
+          <td>✅ Precise</td>
+          <td>⚠️ Variable</td>
+        </tr>
+        <tr>
+          <td>Safety</td>
+          <td>✅ Safer</td>
+          <td>⚠️ Risk of overheating</td>
+        </tr>
+        <tr>
+          <td>Speed</td>
+          <td>Slower (even heat)</td>
+          <td>Faster (focused heat)</td>
+        </tr>
+        <tr>
+          <td>Recommendation</td>
+          <td>✅ <strong>Preferred for display work</strong></td>
+          <td>OK for back glass removal</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>E4. Speed Techniques — Fast Replacement (Service Center)</h2>
+    <h3>Pro Workflow for Speed + Quality:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">#</th>
+          <th style="width: 62%;">Optimization</th>
+          <th style="width: 30%;">Time Saved</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Model-specific teardown memorized</strong> — no guide needed</td>
+          <td>5-10 min</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Pre-organized screw templates</strong> — magnetic mat with labeled zones</td>
+          <td>3-5 min</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Pre-cut adhesive strips</strong> ready — no liquid glue cleanup</td>
+          <td>5-8 min</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Heating pad preheated</strong> before starting</td>
+          <td>2-3 min</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Pre-test new display</strong> before disassembly begins</td>
+          <td>Avoids complete rework</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Battery disconnect = muscle memory</strong> — always first</td>
+          <td>Safety + no short circuits</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Reassembly in reverse order</strong> — photos for reference</td>
+          <td>No mistakes, no rework</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Quality parts</strong> — proper fit = no filing/trimming needed</td>
+          <td>5-10 min</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Average Replacement Times (Professional):</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 40%;">Device Type</th>
+          <th style="width: 30%;">Display Replacement</th>
+          <th style="width: 30%;">Glass-Only Refurbish</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Budget phone (simple clip design)</td>
+          <td>15-25 min</td>
+          <td>Not recommended</td>
+        </tr>
+        <tr>
+          <td>Mid-range (adhesive sealed)</td>
+          <td>25-40 min</td>
+          <td>45-60 min</td>
+        </tr>
+        <tr>
+          <td>Premium flagship (water-resistant)</td>
+          <td>40-60 min</td>
+          <td>60-90 min</td>
+        </tr>
+        <tr>
+          <td>iPhone (any model)</td>
+          <td>30-45 min</td>
+          <td>50-70 min</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>E5. Common Mistakes — தவிர்க்க வேண்டிய தவறுகள்</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 6%;">#</th>
+          <th style="width: 30%;">❌ Mistake</th>
+          <th style="width: 32%;">💥 Result</th>
+          <th style="width: 32%;">✅ Correct Way</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Battery disconnect செய்யாமல் work start</td>
+          <td>Short circuit → motherboard damage</td>
+          <td><strong>Always battery FIRST</strong></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Metal tools use for prying</td>
+          <td>Scratched frame, punctured battery</td>
+          <td>Plastic tools only</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Excessive force when screen stuck</td>
+          <td>Broken frame, snapped flex cables</td>
+          <td>More heat, not more force</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Flex cable sharp bend (90°)</td>
+          <td>Micro-fractures → display lines/failure</td>
+          <td>Gentle wide curves</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Skip pre-installation test</td>
+          <td>Bad display installed → full rework needed</td>
+          <td>Always test before glue</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Too much adhesive</td>
+          <td>Display gap, light leak, internal seepage</td>
+          <td>Thin, consistent bead</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>No curing time</td>
+          <td>Display lifts/falls off</td>
+          <td>Clamp for 30-60 min, full cure 24-48 hrs</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Wrong screw locations</td>
+          <td>Screw too long → motherboard puncture 🚨</td>
+          <td>Photo each step, magnetic mat</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Misaligned connector forced in</td>
+          <td>Bent pins → permanent socket damage</td>
+          <td>Align first, then gentle press</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Ignoring old adhesive cleanup</td>
+          <td>New display sits uneven → gaps</td>
+          <td>100% clean before new adhesive</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PART F -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART F: Display Quality Grades</div>
+      <div class="part-subtitle">டிஸ்ப்ளே தரம் பிரித்தறிதல்</div>
+    </div>
+
+    <h2>F1. Replacement Display Grades — Complete Guide</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Grade</th>
+          <th style="width: 28%;">Description</th>
+          <th style="width: 15%;">Quality</th>
+          <th style="width: 12%;">Price</th>
+          <th style="width: 25%;">Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Original / OEM</strong></td>
+          <td>Factory-manufactured genuine part</td>
+          <td>⭐⭐⭐⭐⭐ 100%</td>
+          <td>₹₹₹₹ Highest</td>
+          <td>Customer demanding best quality</td>
+        </tr>
+        <tr>
+          <td><strong>Original Pulled/Refurbished</strong></td>
+          <td>Genuine panel from donor phone + new glass</td>
+          <td>⭐⭐⭐⭐ 90-95%</td>
+          <td>₹₹₹ High</td>
+          <td>Best value for quality</td>
+        </tr>
+        <tr>
+          <td><strong>Soft OLED</strong></td>
+          <td>Aftermarket flexible OLED</td>
+          <td>⭐⭐⭐⭐ 85-90%</td>
+          <td>₹₹₹ Medium-High</td>
+          <td>Good alternative to original OLED</td>
+        </tr>
+        <tr>
+          <td><strong>Hard OLED</strong></td>
+          <td>Aftermarket rigid OLED</td>
+          <td>⭐⭐⭐ 75-85%</td>
+          <td>₹₹ Medium</td>
+          <td>Budget OLED option</td>
+        </tr>
+        <tr>
+          <td><strong>In-Cell LCD</strong></td>
+          <td>LCD with integrated touch</td>
+          <td>⭐⭐ 60-70%</td>
+          <td>₹₹ Low-Medium</td>
+          <td>Budget repair (OLED phone → LCD downgrade)</td>
+        </tr>
+        <tr>
+          <td><strong>TFT LCD</strong></td>
+          <td>Basic LCD panel</td>
+          <td>⭐ 40-50%</td>
+          <td>₹ Lowest</td>
+          <td>Very budget, older phones</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>How to Identify Quality — Testing Methods:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Test</th>
+          <th style="width: 35%;">What to Check</th>
+          <th style="width: 40%;">Red Flags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Black level</strong></td>
+          <td>True black on OLED vs grey on LCD</td>
+          <td>"OLED" display showing grey blacks = LCD pretending to be OLED</td>
+        </tr>
+        <tr>
+          <td><strong>Brightness</strong></td>
+          <td>Max brightness comparison with reference</td>
+          <td>Dim display = low-quality panel</td>
+        </tr>
+        <tr>
+          <td><strong>Color accuracy</strong></td>
+          <td>Side-by-side with same model phone</td>
+          <td>Washed out / over-saturated = aftermarket</td>
+        </tr>
+        <tr>
+          <td><strong>Viewing angle</strong></td>
+          <td>Tilt phone 45° — color shift?</td>
+          <td>Heavy color shift = TFT LCD</td>
+        </tr>
+        <tr>
+          <td><strong>Touch response</strong></td>
+          <td>Slow drag across all areas</td>
+          <td>Dead zones, lag = poor digitizer</td>
+        </tr>
+        <tr>
+          <td><strong>Fingerprint sensor</strong></td>
+          <td>Under-display FP test</td>
+          <td>Not working = incompatible screen</td>
+        </tr>
+        <tr>
+          <td><strong>True Tone / Auto-brightness</strong></td>
+          <td>Settings check</td>
+          <td>Not working = non-genuine (iPhone)</td>
+        </tr>
+        <tr>
+          <td><strong>System warning</strong></td>
+          <td>Settings &gt; About phone</td>
+          <td>"Non-genuine display" warning = aftermarket</td>
+        </tr>
+        <tr>
+          <td><strong>Bezels / Fitment</strong></td>
+          <td>Gap between screen and frame</td>
+          <td>Gaps, raised edges = wrong dimensions</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Customer Communication — Quality Grades:</h3>
+    <div class="alert-box alert-tip">
+      <strong>💡 Pro Tip — Always offer the customer a choice:</strong>
+      <ul>
+        <li>"Original display costs ₹XXXX — same as factory"</li>
+        <li>"Refurbished original costs ₹XXXX — 95% quality, good value"</li>
+        <li>"Aftermarket OLED costs ₹XXXX — good quality, lower price"</li>
+        <li>"LCD option costs ₹XXXX — cheapest, but lower quality"</li>
+      </ul>
+      <p style="margin-top: 6px;"><strong>Let the customer decide based on budget.</strong> Never install low-quality without informing.</p>
+    </div>
+  </div>
+
+  <!-- PART G -->
+  <div class="part-container">
+    <div class="part-header">
+      <div class="part-title">PART G: Quick Reference &amp; Troubleshooting Matrix</div>
+      <div class="part-subtitle">All Levels Quick Reference</div>
+    </div>
+
+    <h2>G1. Master Defect Diagnosis Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Defect</th>
+          <th style="width: 22%;">Appearance</th>
+          <th style="width: 15%;">Software/Hardware?</th>
+          <th style="width: 18%;">Can Fix Without Replacement?</th>
+          <th style="width: 25%;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>White dot</strong> (AssistiveTouch)</td>
+          <td>Floating circle</td>
+          <td>Software</td>
+          <td>✅ Yes</td>
+          <td>Settings &gt; Accessibility &gt; disable</td>
+        </tr>
+        <tr>
+          <td><strong>White dot</strong> (stuck pixel)</td>
+          <td>Fixed bright dot</td>
+          <td>Hardware</td>
+          <td>⚠️ Maybe</td>
+          <td>Pixel refresh app 10-60 min</td>
+        </tr>
+        <tr>
+          <td><strong>White dot</strong> (pressure damage)</td>
+          <td>Cloudy bright area</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Black dot</strong> (dead pixel)</td>
+          <td>Tiny fixed black dot</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Black dot</strong> (stuck dark pixel)</td>
+          <td>Small dark dot</td>
+          <td>Hardware</td>
+          <td>⚠️ Maybe</td>
+          <td>Pixel refresh app</td>
+        </tr>
+        <tr>
+          <td><strong>Black ink stain</strong></td>
+          <td>Spreading dark patch</td>
+          <td>Hardware</td>
+          <td>❌ <strong>No — SPREADS</strong></td>
+          <td><strong>Urgent display replacement</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Green line</strong></td>
+          <td>Vertical green line</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Pink/Purple line</strong></td>
+          <td>Vertical colored line</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Ghost touch</strong> (charging)</td>
+          <td>Random touches while charging</td>
+          <td>External</td>
+          <td>✅ Yes</td>
+          <td>Use original charger</td>
+        </tr>
+        <tr>
+          <td><strong>Ghost touch</strong> (always)</td>
+          <td>Random touches always</td>
+          <td>Hardware</td>
+          <td>⚠️ Maybe</td>
+          <td>Re-seat connector / add insulation / replace display</td>
+        </tr>
+        <tr>
+          <td><strong>Display flickering</strong></td>
+          <td>Screen blinks/flashes</td>
+          <td>Both possible</td>
+          <td>⚠️ Maybe</td>
+          <td>Software update → re-seat connector → replace</td>
+        </tr>
+        <tr>
+          <td><strong>Yellow/Blue tint</strong></td>
+          <td>Color temperature off</td>
+          <td>Both possible</td>
+          <td>✅ Often</td>
+          <td>Settings adjustment → re-seat connector</td>
+        </tr>
+        <tr>
+          <td><strong>Burn-in</strong></td>
+          <td>Ghost image permanently</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Image retention</strong></td>
+          <td>Temporary ghost image</td>
+          <td>—</td>
+          <td>✅ Yes</td>
+          <td>Display varied content, wait</td>
+        </tr>
+        <tr>
+          <td><strong>No display</strong> (phone works)</td>
+          <td>Black screen, sound/vibrate OK</td>
+          <td>Hardware</td>
+          <td>⚠️ Maybe</td>
+          <td>Re-seat connector → check backlight IC → replace</td>
+        </tr>
+        <tr>
+          <td><strong>Half display</strong></td>
+          <td>Only half screen shows</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Touch dead zones</strong></td>
+          <td>Parts of screen unresponsive</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+        <tr>
+          <td><strong>Backlight bleed</strong> (LCD)</td>
+          <td>Bright edges/corners on dark</td>
+          <td>Hardware</td>
+          <td>❌ No</td>
+          <td>Display replacement</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>G2. Essential Equipment — Display Repair Setup</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Equipment</th>
+          <th style="width: 30%;">Purpose</th>
+          <th style="width: 20%;">Budget (₹)</th>
+          <th style="width: 20%;">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Precision screwdriver set</td>
+          <td>Device opening</td>
+          <td>300-1,500</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>Plastic pry tools, spudgers</td>
+          <td>Safe opening</td>
+          <td>100-500</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>Suction cups</td>
+          <td>Screen lifting</td>
+          <td>100-400</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>ESD wrist strap + mat</td>
+          <td>Static protection</td>
+          <td>500-2,000</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>Heating pad/plate</td>
+          <td>Adhesive softening</td>
+          <td>1,500-5,000</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>Heat gun (digital)</td>
+          <td>Back glass, adhesive</td>
+          <td>1,000-3,000</td>
+          <td>🟡 Important</td>
+        </tr>
+        <tr>
+          <td>Adhesive set (B-7000/T-7000)</td>
+          <td>Display bonding</td>
+          <td>200-500</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>Pre-cut adhesive strips</td>
+          <td>Clean bonding</td>
+          <td>50-200 per set</td>
+          <td>🟡 Important</td>
+        </tr>
+        <tr>
+          <td>Kapton tape roll</td>
+          <td>Insulation/protection</td>
+          <td>100-300</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>IPA 99% + microfiber cloths</td>
+          <td>Cleaning</td>
+          <td>200-500</td>
+          <td>🔴 Must Have</td>
+        </tr>
+        <tr>
+          <td>OCA Lamination Machine</td>
+          <td>Glass-only refurbishing</td>
+          <td>15,000-50,000</td>
+          <td>🟢 Advanced</td>
+        </tr>
+        <tr>
+          <td>Bubble Remover (Autoclave)</td>
+          <td>Refurbishing</td>
+          <td>8,000-30,000</td>
+          <td>🟢 Advanced</td>
+        </tr>
+        <tr>
+          <td>LCD Separator</td>
+          <td>Glass separation</td>
+          <td>5,000-15,000</td>
+          <td>🟢 Advanced</td>
+        </tr>
+        <tr>
+          <td>Molybdenum wire</td>
+          <td>Glass cutting</td>
+          <td>100-300</td>
+          <td>🟢 Advanced</td>
+        </tr>
+        <tr>
+          <td>UV Lamp</td>
+          <td>LOCA curing</td>
+          <td>500-2,000</td>
+          <td>🟢 Advanced</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>G3. Adhesive Quick Reference</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 45%;">Situation</th>
+          <th style="width: 55%;">Recommended Adhesive</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>White/light frame + display</td>
+          <td><strong>B-7000</strong> (transparent)</td>
+        </tr>
+        <tr>
+          <td>Black frame + display</td>
+          <td><strong>T-7000</strong> (black)</td>
+        </tr>
+        <tr>
+          <td>Precision/delicate work</td>
+          <td><strong>T-8000</strong> (transparent, low-odor)</td>
+        </tr>
+        <tr>
+          <td>OEM-style clean bond</td>
+          <td><strong>Pre-cut adhesive strips</strong></td>
+        </tr>
+        <tr>
+          <td>Narrow-bezel phone</td>
+          <td><strong>2UUL G301/G302</strong> (cold press)</td>
+        </tr>
+        <tr>
+          <td>Glass-to-display bonding (flat)</td>
+          <td><strong>OCA film</strong> + lamination machine</td>
+        </tr>
+        <tr>
+          <td>Glass-to-display bonding (curved)</td>
+          <td><strong>LOCA</strong> + UV lamp (caution!)</td>
+        </tr>
+        <tr>
+          <td>Flex cable insulation</td>
+          <td><strong>Kapton tape</strong></td>
+        </tr>
+        <tr>
+          <td>EMI shielding</td>
+          <td><strong>Copper tape</strong> (careful — conductive!)</td>
+        </tr>
+        <tr>
+          <td>Component securing</td>
+          <td><strong>Tesa tape</strong> (electronics grade)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="doc-footer">
+      <div class="meta-box">
+        <p><strong>Document Version:</strong> 1.0 | <strong>Created:</strong> July 2026</p>
+        <p><strong>For:</strong> Maha Enics Service Center — Display Repair Division</p>
+        <p><strong>Classification:</strong> Internal Training &amp; Reference Document | <strong>Scope:</strong> Basic → Intermediate → Advanced → Expert</p>
+      </div>
+      <p><em>© 2026 Maha Enics Service Center. All rights reserved.</em></p>
+    </div>
+  </div>
+
+</body>
+</html>
