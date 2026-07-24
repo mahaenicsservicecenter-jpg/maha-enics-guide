@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📱 Detailed Power Flow — Component Level</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0e1a; color: #e0e6f0; min-height: 100vh; overflow-x: hidden; }
+
+  .header {
+    background: linear-gradient(135deg, #0f1629, #1a1f3a);
+    border-bottom: 2px solid #2a3a5c;
+    padding: 12px 20px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  .header h1 { font-size: 1rem; font-weight: 700; background: linear-gradient(90deg, #4fc3f7, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .model { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #7a8bb5; background: #151b30; padding: 4px 10px; border-radius: 6px; border: 1px solid #2a3a5c; }
+
+  .controls {
+    display: flex; gap: 6px; align-items: center; padding: 10px 20px;
+    background: #0d1220; border-bottom: 1px solid #1a2540; flex-wrap: wrap;
+  }
+  .controls button { font-family: 'Inter'; font-size: 0.75rem; font-weight: 600; padding: 7px 14px; border: none; border-radius: 7px; cursor: pointer; transition: all 0.2s; }
+  .btn-prev { background: #1e2a4a; color: #7a9cc6; }
+  .btn-prev:hover { background: #2a3a5c; }
+  .btn-next { background: #1565c0; color: #fff; }
+  .btn-next:hover { background: #1976d2; }
+  .btn-auto { background: #00695c; color: #b2dfdb; }
+  .btn-auto.playing { background: #c62828; color: #ffcdd2; }
+  .btn-reset { background: #37474f; color: #90a4ae; }
+  .stage-ind { font-family: 'JetBrains Mono'; font-size: 0.75rem; color: #4fc3f7; margin-left: auto; background: #0a1025; padding: 5px 12px; border-radius: 6px; border: 1px solid #1a3050; }
+
+  .main { display: flex; height: calc(100vh - 105px); min-height: 650px; }
+  .board-container { flex: 1; position: relative; overflow: hidden; background: #080c18; }
+  .board-container svg { width: 100%; height: 100%; }
+
+  .info-panel {
+    width: 360px; background: #0d1225; border-left: 2px solid #1a2540;
+    overflow-y: auto; padding: 16px;
+  }
+  .info-panel h2 { font-size: 0.95rem; font-weight: 700; color: #4fc3f7; margin-bottom: 6px; }
+  .info-panel .stitle { font-size: 0.8rem; color: #81d4fa; margin-bottom: 10px; font-weight: 600; }
+  .info-panel .desc { font-size: 0.73rem; line-height: 1.75; color: #b0bec5; margin-bottom: 14px; }
+  .info-panel .desc strong { color: #fff; }
+  .info-panel .desc em { color: #ffcc80; font-style: normal; }
+
+  .amp-box {
+    background: linear-gradient(135deg, #1a0a0a, #2a1010);
+    border: 2px solid #c62828; border-radius: 10px; padding: 12px; text-align: center; margin-bottom: 12px;
+  }
+  .amp-box .lbl { font-size: 0.6rem; color: #ef9a9a; text-transform: uppercase; letter-spacing: 1px; }
+  .amp-box .val { font-family: 'JetBrains Mono'; font-size: 1.6rem; font-weight: 900; color: #ff5252; margin: 2px 0; }
+  .amp-box .unit { font-size: 0.65rem; color: #e57373; }
+
+  .tech {
+    background: #111830; border: 1px solid #1a2a4a; border-radius: 8px; padding: 10px;
+    margin-bottom: 10px; font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #80cbc4; line-height: 1.8;
+  }
+
+  .comp-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.65rem;
+  }
+  .comp-table th { background: #1a2040; color: #4fc3f7; padding: 6px 8px; text-align: left; font-weight: 600; border: 1px solid #2a3a5c; }
+  .comp-table td { padding: 5px 8px; border: 1px solid #1a2540; color: #b0bec5; }
+  .comp-table td:first-child { font-family: 'JetBrains Mono'; color: #ffcc80; font-weight: 600; }
+
+  .tip {
+    background: #1a1a00; border-left: 3px solid #ffd600; padding: 8px 10px;
+    font-size: 0.68rem; color: #fff9c4; border-radius: 0 6px 6px 0; line-height: 1.5;
+  }
+
+  /* SVG */
+  .ci { fill: #141e35; stroke: #1e3050; stroke-width: 1; }
+  .ci.on { stroke-width: 1.8; }
+  .ic { rx: 8; }
+  .cap { rx: 2; }
+  .res { rx: 2; }
+  .ind { rx: 3; }
+
+  .ic.pmic.on { fill: #3e1010; stroke: #f44336; }
+  .ic.cpu.on { fill: #0a2040; stroke: #42a5f5; }
+  .ic.chg.on { fill: #3e2a00; stroke: #ffb300; }
+  .ic.bb.on { fill: #3e0a2a; stroke: #ec407a; }
+  .ic.disp.on { fill: #003040; stroke: #00bcd4; }
+  .ic.cam.on { fill: #1a1a50; stroke: #7c4dff; }
+  .ic.aud.on { fill: #200a3e; stroke: #ba68c8; }
+  .ic.wifi.on { fill: #002040; stroke: #03a9f4; }
+
+  .cap.on { fill: #2a1a00; stroke: #ffa726; }
+  .res.on { fill: #1a2a1a; stroke: #66bb6a; }
+  .ind.on { fill: #0a1a2a; stroke: #29b6f6; }
+  .bat.on { fill: #1a3a1a; stroke: #4caf50; }
+  .crys.on { fill: #003030; stroke: #26a69a; }
+  .shunt.on { fill: #3a0a0a; stroke: #ef5350; }
+  .ntc.on { fill: #2a2a00; stroke: #cddc39; }
+  .pa.on { fill: #3e1a00; stroke: #ff7043; }
+  .saw.on { fill: #2a0a2a; stroke: #ab47bc; }
+  .bld.on { fill: #003040; stroke: #00acc1; }
+
+  .ln { stroke: #111a30; stroke-width: 0.8; fill: none; }
+  .ln.pwr { stroke: #e53935; stroke-width: 2; }
+  .ln.dat { stroke: #1e88e5; stroke-width: 1.5; }
+  .ln.clk { stroke: #43a047; stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .ln.sig { stroke: #fb8c00; stroke-width: 1.5; }
+
+  @keyframes fp { 0%{stroke-dashoffset:16;} 100%{stroke-dashoffset:0;} }
+  .fl { stroke-dasharray: 8 4; animation: fp 0.6s linear infinite; }
+  @keyframes gp { 0%,100%{filter:drop-shadow(0 0 2px currentColor);} 50%{filter:drop-shadow(0 0 8px currentColor);} }
+  .gw { animation: gp 1.5s ease-in-out infinite; }
+
+  .lt { font-family: 'JetBrains Mono'; font-size: 7px; fill: #506080; text-anchor: middle; pointer-events: none; }
+  .lt.on { fill: #cfd8dc; font-weight: 700; }
+  .vt { font-family: 'JetBrains Mono'; font-size: 6.5px; fill: #ffd600; text-anchor: middle; display: none; }
+  .ct { font-family: 'JetBrains Mono'; font-size: 5.5px; fill: #90a4ae; text-anchor: middle; }
+  .ct.on { fill: #ffcc80; }
+
+  .legend {
+    position: absolute; bottom: 8px; left: 8px; background: rgba(10,14,26,0.95);
+    border: 1px solid #2a3a5c; border-radius: 6px; padding: 6px 10px;
+    font-size: 0.58rem; display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; color: #78909c; }
+  .legend-line { width: 16px; height: 3px; border-radius: 1px; }
+
+  @media (max-width: 900px) {
+    .main { flex-direction: column; }
+    .info-panel { width: 100%; height: 320px; border-left: none; border-top: 2px solid #1a2540; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>📱 Component-Level Power Flow — Detailed Animation</h1>
+  <div class="model">Redmi Note 13 Pro 5G | SM7435 | PM7550 | Component Detail View</div>
+</div>
+<div class="controls">
+  <button class="btn-prev" onclick="prev()">◀ Prev</button>
+  <button class="btn-next" onclick="next()">Next ▶</button>
+  <button class="btn-auto" id="ab" onclick="toggleAuto()">▶ Auto</button>
+  <button class="btn-reset" onclick="reset()">⟳ Reset</button>
+  <div class="stage-ind" id="si">Stage 0 / 12</div>
+</div>
+<div class="main">
+<div class="board-container">
+<svg id="svg" viewBox="0 0 960 640">
+<defs>
+  <pattern id="g" width="15" height="15" patternUnits="userSpaceOnUse">
+    <path d="M15 0L0 0 0 15" fill="none" stroke="#0d1525" stroke-width="0.4"/>
+  </pattern>
+</defs>
+<rect width="960" height="640" fill="url(#g)"/>
+
+<!-- ========== BATTERY SECTION ========== -->
+<rect id="bat" class="ci bat ic" x="30" y="250" width="70" height="80" rx="8"/>
+<text class="lt" x="65" y="280" id="lbat">🔋 BATTERY</text>
+<text class="lt" x="65" y="295" id="lbat2">Li-ion</text>
+<text class="ct" x="65" y="310">VBAT 3.7-4.2V</text>
+<!-- Battery connector pins -->
+<text class="ct" x="40" y="340">B+ B- NTC BSI</text>
+
+<!-- ========== CHARGING SECTION ========== -->
+<!-- USB-C Sub-board -->
+<rect id="usb" class="ci ic" x="25" y="460" width="80" height="35" rx="6"/>
+<text class="lt" x="65" y="480" id="lusb">USB-C Port</text>
+<text class="ct" x="65" y="500">VBUS D+ D- CC1 CC2</text>
+
+<!-- ESD Diodes near USB -->
+<rect id="esd1" class="ci cap" x="115" y="462" width="18" height="12" rx="2"/>
+<text class="ct" x="124" y="471">ESD</text>
+<rect id="esd2" class="ci cap" x="115" y="480" width="18" height="12" rx="2"/>
+<text class="ct" x="124" y="489">ESD</text>
+
+<!-- OVP IC -->
+<rect id="ovp" class="ci ic" x="25" y="405" width="60" height="28" rx="5"/>
+<text class="lt" x="55" y="423" id="lovp">OVP IC</text>
+
+<!-- Shunt Resistor -->
+<rect id="shunt" class="ci res shunt" x="95" y="408" width="22" height="10" rx="2"/>
+<text class="ct" x="106" y="416" id="lshunt">R_SHUNT</text>
+<text class="ct" x="106" y="426">0.005Ω</text>
+
+<!-- Charging IC -->
+<rect id="chgic" class="ci ic chg" x="30" y="350" width="80" height="40" rx="7"/>
+<text class="lt" x="70" y="368" id="lchg">Charging IC</text>
+<text class="ct" x="70" y="380">QC4+/PD 67W</text>
+
+<!-- Input cap for charging -->
+<rect id="c_chg_in" class="ci cap" x="120" y="353" width="16" height="10" rx="2"/>
+<text class="ct" x="128" y="361" id="lc_chg_in">C401</text>
+<!-- Output cap for charging -->
+<rect id="c_chg_out" class="ci cap" x="120" y="373" width="16" height="10" rx="2"/>
+<text class="ct" x="128" y="381" id="lc_chg_out">C402</text>
+<!-- NTC Thermistor -->
+<rect id="ntc" class="ci res ntc" x="120" y="390" width="20" height="10" rx="2"/>
+<text class="ct" x="130" y="398" id="lntc">NTC</text>
+<text class="ct" x="130" y="408">Temp Sensor</text>
+
+<!-- ========== PMIC SECTION ========== -->
+<rect id="pmic" class="ci ic pmic" x="195" y="230" width="150" height="120" rx="10"/>
+<text class="lt" x="270" y="260" id="lpmic">⚡ PMIC</text>
+<text class="lt" x="270" y="275" id="lpmic2">PM7550</text>
+<text class="lt" x="270" y="290" id="lpmic3">Power Manager</text>
+
+<!-- PMIC Input Capacitors -->
+<rect id="c_pmic_in1" class="ci cap" x="160" y="240" width="14" height="10" rx="2"/>
+<text class="ct" x="167" y="248">C101</text>
+<rect id="c_pmic_in2" class="ci cap" x="160" y="258" width="14" height="10" rx="2"/>
+<text class="ct" x="167" y="266">C102</text>
+
+<!-- SMPS Output: VDD_CX Rail -->
+<!-- Inductor L101 -->
+<rect id="l_cx" class="ci ind" x="360" y="235" width="24" height="12" rx="3"/>
+<text class="ct" x="372" y="244" id="ll_cx">L101</text>
+<!-- Output Cap C201 -->
+<rect id="c_cx" class="ci cap" x="392" y="235" width="14" height="12" rx="2"/>
+<text class="ct" x="399" y="244" id="lc_cx">C201</text>
+<text class="vt" x="405" y="230" id="v_cx">VDD_CX 0.9V</text>
+
+<!-- SMPS Output: VDD_MX Rail -->
+<rect id="l_mx" class="ci ind" x="360" y="258" width="24" height="12" rx="3"/>
+<text class="ct" x="372" y="267" id="ll_mx">L102</text>
+<rect id="c_mx" class="ci cap" x="392" y="258" width="14" height="12" rx="2"/>
+<text class="ct" x="399" y="267" id="lc_mx">C202</text>
+<text class="vt" x="405" y="253" id="v_mx">VDD_MX 0.75V</text>
+
+<!-- SMPS Output: VDD_GFX Rail -->
+<rect id="l_gfx" class="ci ind" x="360" y="281" width="24" height="12" rx="3"/>
+<text class="ct" x="372" y="290">L103</text>
+<rect id="c_gfx" class="ci cap" x="392" y="281" width="14" height="12" rx="2"/>
+<text class="ct" x="399" y="290">C203</text>
+<text class="vt" x="405" y="276" id="v_gfx">VDD_GFX 0.9V</text>
+
+<!-- LDO Outputs (smaller, right side of PMIC) -->
+<!-- VCC_DISPLAY -->
+<rect id="c_disp_pwr" class="ci cap" x="360" y="304" width="14" height="10" rx="2"/>
+<text class="ct" x="367" y="312">C301</text>
+<text class="vt" x="380" y="300" id="v_disp">VCC_DISP 1.8V</text>
+
+<!-- VCC_CAM -->
+<rect id="c_cam_pwr" class="ci cap" x="200" y="195" width="14" height="10" rx="2"/>
+<text class="ct" x="207" y="203">C302</text>
+<text class="vt" x="215" y="192" id="v_cam">VCC_CAM 2.8V</text>
+
+<!-- VCC_SIM -->
+<text class="vt" x="350" y="340" id="v_sim">VCC_SIM 1.8V</text>
+
+<!-- ========== CRYSTAL ========== -->
+<rect id="crys" class="ci crys" x="235" y="400" width="60" height="25" rx="5"/>
+<text class="lt" x="265" y="416" id="lcrys">⏰ Crystal</text>
+<text class="ct" x="265" y="430">19.2 MHz</text>
+<!-- Crystal load caps -->
+<rect id="c_crys1" class="ci cap" x="220" y="430" width="12" height="8" rx="1"/>
+<text class="ct" x="226" y="437">C501</text>
+<rect id="c_crys2" class="ci cap" x="280" y="430" width="12" height="8" rx="1"/>
+<text class="ct" x="286" y="437">C502</text>
+
+<!-- ========== CPU SECTION ========== -->
+<rect id="cpu" class="ci ic cpu" x="445" y="210" width="140" height="110" rx="10"/>
+<text class="lt" x="515" y="245" id="lcpu">🧠 CPU / SoC</text>
+<text class="lt" x="515" y="260" id="lcpu2">SM7435</text>
+<text class="lt" x="515" y="275" id="lcpu3">Snapdragon 7s Gen 2</text>
+<text class="ct" x="515" y="290">CPU + GPU + ISP + Modem</text>
+
+<!-- CPU Decoupling Caps (around CPU) -->
+<rect id="c_cpu1" class="ci cap" x="450" y="195" width="12" height="8" rx="1"/>
+<text class="ct" x="456" y="202" id="lc_cpu1">C601</text>
+<rect id="c_cpu2" class="ci cap" x="470" y="195" width="12" height="8" rx="1"/>
+<text class="ct" x="476" y="202">C602</text>
+<rect id="c_cpu3" class="ci cap" x="490" y="195" width="12" height="8" rx="1"/>
+<text class="ct" x="496" y="202">C603</text>
+<rect id="c_cpu4" class="ci cap" x="510" y="195" width="12" height="8" rx="1"/>
+<text class="ct" x="516" y="202">C604</text>
+<rect id="c_cpu5" class="ci cap" x="530" y="195" width="12" height="8" rx="1"/>
+<text class="ct" x="536" y="202">C605</text>
+<!-- Bottom decoupling -->
+<rect id="c_cpu6" class="ci cap" x="460" y="325" width="12" height="8" rx="1"/>
+<text class="ct" x="466" y="332">C606</text>
+<rect id="c_cpu7" class="ci cap" x="480" y="325" width="12" height="8" rx="1"/>
+<text class="ct" x="486" y="332">C607</text>
+
+<!-- I2C Pull-up Resistors -->
+<rect id="r_sda" class="ci res" x="445" y="345" width="18" height="8" rx="1"/>
+<text class="ct" x="454" y="352" id="lr_sda">R_SDA</text>
+<rect id="r_scl" class="ci res" x="470" y="345" width="18" height="8" rx="1"/>
+<text class="ct" x="479" y="352" id="lr_scl">R_SCL</text>
+<text class="ct" x="466" y="362">I2C Pull-ups</text>
+<text class="ct" x="466" y="370">4.7kΩ each</text>
+
+<!-- ========== RAM ========== -->
+<rect id="ram" class="ci ic" x="640" y="130" width="100" height="50" rx="7"/>
+<text class="lt" x="690" y="153" id="lram">📒 RAM</text>
+<text class="lt" x="690" y="165" id="lram2">8GB LPDDR5</text>
+<!-- RAM decoupling caps -->
+<rect id="c_ram1" class="ci cap" x="645" y="118" width="10" height="7" rx="1"/>
+<text class="ct" x="650" y="116">C701</text>
+<rect id="c_ram2" class="ci cap" x="660" y="118" width="10" height="7" rx="1"/>
+<text class="ct" x="665" y="116">C702</text>
+<text class="vt" x="690" y="112" id="v_ram">VDDQ 0.5V</text>
+
+<!-- ========== UFS ========== -->
+<rect id="ufs" class="ci ic" x="660" y="230" width="90" height="45" rx="7"/>
+<text class="lt" x="705" y="250" id="lufs">🗄️ UFS 2.2</text>
+<text class="lt" x="705" y="263" id="lufs2">256GB</text>
+<rect id="c_ufs1" class="ci cap" x="665" y="218" width="10" height="7" rx="1"/>
+<text class="ct" x="670" y="216">C801</text>
+<text class="vt" x="705" y="212" id="v_ufs">VCC 2.5V VCCQ 1.2V</text>
+
+<!-- ========== DISPLAY SECTION ========== -->
+<rect id="dispic" class="ci ic disp" x="500" y="50" width="130" height="45" rx="7"/>
+<text class="lt" x="565" y="70" id="ldisp">📺 AMOLED Display</text>
+<text class="lt" x="565" y="82" id="ldisp2">1080×2400 120Hz</text>
+
+<!-- Backlight Driver IC -->
+<rect id="bld" class="ci ic bld" x="430" y="55" width="55" height="25" rx="4"/>
+<text class="lt" x="458" y="70" id="lbld">BL Driver</text>
+<!-- BL Inductor -->
+<rect id="l_bl" class="ci ind" x="430" y="88" width="20" height="10" rx="2"/>
+<text class="ct" x="440" y="96">L401</text>
+<!-- BL Output cap -->
+<rect id="c_bl" class="ci cap" x="460" y="88" width="12" height="10" rx="1"/>
+<text class="ct" x="466" y="96">C901</text>
+<text class="vt" x="465" y="108" id="v_elvdd">ELVDD 4.6V</text>
+<text class="vt" x="565" y="46" id="v_elvss">ELVSS -3.0V</text>
+
+<!-- Display FPC connector -->
+<rect id="fpc_disp" class="ci" x="530" y="100" width="60" height="10" rx="2"/>
+<text class="ct" x="560" y="108">FPC Connector</text>
+
+<!-- ========== CAMERA SECTION ========== -->
+<rect id="camic" class="ci ic cam" x="190" y="75" width="110" height="55" rx="7"/>
+<text class="lt" x="245" y="97" id="lcam">📷 Camera</text>
+<text class="lt" x="245" y="110" id="lcam2">200MP Main</text>
+<!-- Camera I2C pull-ups -->
+<rect id="r_cam_sda" class="ci res" x="195" y="135" width="16" height="7" rx="1"/>
+<text class="ct" x="203" y="141">R301</text>
+<rect id="r_cam_scl" class="ci res" x="218" y="135" width="16" height="7" rx="1"/>
+<text class="ct" x="226" y="141">R302</text>
+<text class="ct" x="215" y="150">I2C 400kHz</text>
+<!-- Camera power filter cap -->
+<rect id="c_cam1" class="ci cap" x="305" y="85" width="12" height="8" rx="1"/>
+<text class="ct" x="311" y="92">C303</text>
+
+<!-- ========== BASEBAND / RF SECTION ========== -->
+<rect id="bbic" class="ci ic bb" x="670" y="330" width="100" height="55" rx="8"/>
+<text class="lt" x="720" y="353" id="lbb">📻 RF Transceiver</text>
+<text class="lt" x="720" y="365" id="lbb2">WTR IC</text>
+
+<!-- Power Amplifier -->
+<rect id="pa" class="ci ic pa" x="790" y="310" width="55" height="25" rx="4"/>
+<text class="lt" x="818" y="326" id="lpa">PA</text>
+<text class="ct" x="818" y="340">Power Amp</text>
+
+<!-- SAW Filter -->
+<rect id="saw1" class="ci saw" x="790" y="345" width="40" height="15" rx="3"/>
+<text class="ct" x="810" y="355" id="lsaw">SAW Filter</text>
+
+<!-- Antenna -->
+<text id="ant" class="lt" x="870" y="335" style="font-size:20px; display:none;">📡</text>
+
+<!-- Antenna Switch -->
+<rect id="antsw" class="ci" x="850" y="340" width="35" height="18" rx="3"/>
+<text class="ct" x="868" y="352">ANT SW</text>
+
+<!-- Baseband decoupling -->
+<rect id="c_bb1" class="ci cap" x="675" y="390" width="10" height="7" rx="1"/>
+<text class="ct" x="680" y="400">C1001</text>
+<rect id="c_bb2" class="ci cap" x="690" y="390" width="10" height="7" rx="1"/>
+<text class="ct" x="695" y="400">C1002</text>
+
+<!-- SIM Card -->
+<rect id="sim" class="ci" x="780" y="390" width="50" height="25" rx="4"/>
+<text class="lt" x="805" y="406" id="lsim">SIM</text>
+<text class="ct" x="805" y="420">ISO 7816</text>
+
+<!-- ========== AUDIO ========== -->
+<rect id="audic" class="ci ic aud" x="555" y="400" width="80" height="35" rx="6"/>
+<text class="lt" x="595" y="418" id="laud">🔊 Audio Codec</text>
+<text class="ct" x="595" y="430">I2S / SLIMbus</text>
+<!-- Speaker amp -->
+<rect id="spkamp" class="ci" x="555" y="445" width="50" height="16" rx="3"/>
+<text class="ct" x="580" y="455">Class-D Amp</text>
+<rect id="c_aud" class="ci cap" x="612" y="445" width="10" height="7" rx="1"/>
+<text class="ct" x="617" y="455">C1101</text>
+
+<!-- ========== SENSORS ========== -->
+<rect id="sensor" class="ci ic" x="380" y="400" width="75" height="30" rx="5"/>
+<text class="lt" x="418" y="418" id="lsen">📐 Sensors</text>
+<text class="ct" x="418" y="435">Gyro Accel Prox ALS</text>
+
+<!-- ========== WIFI/BT ========== -->
+<rect id="wific" class="ci ic wifi" x="710" y="170" width="80" height="35" rx="6"/>
+<text class="lt" x="750" y="188" id="lwifi">📶 WiFi/BT</text>
+<text class="lt" x="750" y="198" id="lwifi2">WCN Series</text>
+<rect id="c_wifi" class="ci cap" x="715" y="208" width="10" height="7" rx="1"/>
+<text class="ct" x="720" y="218">C1201</text>
+
+<!-- ========== LINES ========== -->
+<!-- Battery to PMIC -->
+<path id="ln_bat_pmic" class="ln" d="M100,290 L195,290"/>
+<!-- USB to OVP -->
+<path id="ln_usb_ovp" class="ln" d="M65,460 L55,435"/>
+<!-- OVP to Charging IC -->
+<path id="ln_ovp_chg" class="ln" d="M55,405 L55,390"/>
+<!-- Shunt in charging path -->
+<path id="ln_shunt" class="ln" d="M85,415 L95,413"/>
+<!-- Charging IC to Battery -->
+<path id="ln_chg_bat" class="ln" d="M70,350 L70,330"/>
+<!-- Crystal to PMIC -->
+<path id="ln_crys_pmic" class="ln" d="M265,400 L265,350"/>
+<!-- PMIC to L_CX to C_CX to CPU -->
+<path id="ln_pmic_cx" class="ln" d="M345,245 L360,241"/>
+<path id="ln_cx_cpu" class="ln" d="M406,241 L445,241"/>
+<!-- PMIC to L_MX to C_MX to CPU -->
+<path id="ln_pmic_mx" class="ln" d="M345,265 L360,264"/>
+<path id="ln_mx_cpu" class="ln" d="M406,264 L445,264"/>
+<!-- PMIC to L_GFX -->
+<path id="ln_pmic_gfx" class="ln" d="M345,288 L360,287"/>
+<!-- CPU to RAM -->
+<path id="ln_cpu_ram" class="ln" d="M560,230 L640,160"/>
+<!-- CPU to UFS -->
+<path id="ln_cpu_ufs" class="ln" d="M585,255 L660,255"/>
+<!-- PS_HOLD -->
+<path id="ln_pshold" class="ln" d="M445,305 L345,315"/>
+<text class="vt" x="395" y="320" id="v_pshold">PS_HOLD ✓</text>
+<!-- CPU to Display MIPI -->
+<path id="ln_cpu_disp" class="ln" d="M515,210 L540,100"/>
+<!-- PMIC to Display power -->
+<path id="ln_pmic_disp" class="ln" d="M270,230 L270,160 L440,70"/>
+<!-- PMIC to Camera power -->
+<path id="ln_pmic_cam" class="ln" d="M220,230 L220,130"/>
+<!-- CPU to Camera MIPI -->
+<path id="ln_cpu_cam" class="ln" d="M470,210 L280,130"/>
+<!-- CPU to Baseband -->
+<path id="ln_cpu_bb" class="ln" d="M585,280 L670,350"/>
+<!-- PMIC to Baseband power -->
+<path id="ln_pmic_bb" class="ln" d="M345,330 L670,360"/>
+<!-- BB to PA -->
+<path id="ln_bb_pa" class="ln" d="M770,345 L790,325"/>
+<!-- PA to Antenna Switch -->
+<path id="ln_pa_ant" class="ln" d="M845,325 L850,345"/>
+<!-- BB to SAW -->
+<path id="ln_bb_saw" class="ln" d="M770,358 L790,352"/>
+<!-- BB to SIM -->
+<path id="ln_bb_sim" class="ln" d="M770,370 L780,400"/>
+<!-- CPU to Audio -->
+<path id="ln_cpu_aud" class="ln" d="M545,310 L575,400"/>
+<!-- CPU to Sensors I2C -->
+<path id="ln_cpu_sen" class="ln" d="M480,320 L418,400"/>
+<!-- CPU to WiFi -->
+<path id="ln_cpu_wifi" class="ln" d="M585,230 L710,185"/>
+<!-- NTC to Charging IC -->
+<path id="ln_ntc" class="ln" d="M120,395 L110,385"/>
+<!-- I2C Charging IC to CPU -->
+<path id="ln_chg_i2c" class="ln" d="M110,355 L460,340"/>
+
+<!-- VBAT label on line -->
+<text class="vt" x="148" y="283" id="v_vbat">VBAT 3.8V</text>
+<text class="vt" x="60" y="452" id="v_vbus">VBUS 5-10V</text>
+
+</svg>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-line" style="background:#e53935"></div>Power</div>
+  <div class="legend-item"><div class="legend-line" style="background:#1e88e5"></div>Data</div>
+  <div class="legend-item"><div class="legend-line" style="background:#43a047; height:0; border-top:2px dashed #43a047"></div>Clock</div>
+  <div class="legend-item"><div class="legend-line" style="background:#fb8c00"></div>Signal</div>
+  <div class="legend-item">█ IC&emsp;▪ Cap&emsp;▪ Res&emsp;▪ Ind</div>
+</div>
+</div>
+
+<div class="info-panel" id="ip"></div>
+</div>
+
+<script>
+const S = [
+{id:0, title:"Phone OFF — எல்லாம் Standby",emoji:"🔌",amp:"0.00",
+ on:[], lines:[], vtags:[], 
+ desc:`Phone OFF. Board-ல் எந்த current-ம் ஓடவில்லை.<br><br>PMIC standby mode — RTC LDO மட்டும் active (time ஓடும்).`,
+ tech:`ALL COMPONENTS: OFF\nPMIC: Standby\nRTC: Micro-current only`,
+ comps:[],
+ tip:`💡 DC Supply connect → 0A → Board alive but sleeping. Power button line or PMIC trigger circuit check பண்ணுங்க.`},
+
+{id:1, title:"Battery → PMIC — VBAT Line Active",emoji:"🔋",amp:"0.001",
+ on:['bat','pmic','c_pmic_in1','c_pmic_in2'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1}],
+ vtags:['v_vbat'],
+ desc:`Battery connect → <strong>VBAT line</strong> (3.7-4.2V) → PMIC-க்கு raw power reach.<br><br><em>C101, C102</em> = PMIC input decoupling capacitors. இவை VBAT line-ல் உள்ள noise-ஐ filter பண்ணும். Battery-ல் இருந்து வரும் voltage-ல் ripple/noise இருக்கும் — capacitors அதை smooth பண்ணி clean power கொடுக்கும்.`,
+ tech:`VBAT: 3.7-4.2V → PMIC\nC101: 10µF (bulk filter)\nC102: 100nF (high-freq filter)\nPMIC: Standby → Monitoring PWR_KEY`,
+ comps:[
+  {n:'C101',t:'Capacitor',f:'PMIC input bulk filter — low frequency noise remove'},
+  {n:'C102',t:'Capacitor',f:'PMIC input HF filter — high frequency noise remove'},
+ ],
+ tip:`💡 C101 or C102 short ஆனா → VBAT line short → DC Supply-ல் instant high current. இந்த caps-ஐ remove பண்ணி test பண்ணுங்க.`},
+
+{id:2, title:"Power Button → Crystal ON → 19.2 MHz Clock!",emoji:"⏰",amp:"0.01",
+ on:['bat','pmic','c_pmic_in1','c_pmic_in2','crys','c_crys1','c_crys2'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_crys_pmic',c:'clk',f:1}],
+ vtags:['v_vbat'],
+ desc:`Power button press → PMIC wake up → <strong>Crystal Oscillator</strong> activate!<br><br>Crystal = 19.2 MHz frequency generate பண்றது. இதுதான் CPU-க்கான <strong>"heartbeat"</strong>.<br><br><em>C501, C502</em> = Crystal load capacitors. Crystal சரியா oscillate ஆக இந்த 2 caps MUST be correct value. ஒன்று damaged ஆனாலும் → frequency wrong → CPU start ஆகாது!`,
+ tech:`PWR_KEY: Triggered ✓\nCrystal: 19.2 MHz generating\nC501: ~12pF (load cap 1)\nC502: ~12pF (load cap 2)\nPMIC_RESET_N: Released`,
+ comps:[
+  {n:'Crystal',t:'Oscillator',f:'19.2 MHz clock — CPU heartbeat'},
+  {n:'C501',t:'Capacitor',f:'Crystal load cap — frequency stability'},
+  {n:'C502',t:'Capacitor',f:'Crystal load cap — frequency stability'},
+ ],
+ tip:`💡 Crystal dead / C501,C502 damaged → 0.01A-ல் stuck, CPU start ஆகாது. Crystal-ஐ multimeter-ல் check பண்ண முடியாது — oscilloscope or replacement needed.`},
+
+{id:3, title:"PMIC → Buck Converters → VDD_CX, VDD_MX ON!",emoji:"⚡",amp:"0.05",
+ on:['bat','pmic','c_pmic_in1','c_pmic_in2','crys','c_crys1','c_crys2','l_cx','c_cx','l_mx','c_mx','l_gfx','c_gfx'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_crys_pmic',c:'clk',f:1},{id:'ln_pmic_cx',c:'pwr',f:1},{id:'ln_pmic_mx',c:'pwr',f:1},{id:'ln_pmic_gfx',c:'pwr',f:1}],
+ vtags:['v_vbat','v_cx','v_mx','v_gfx'],
+ desc:`PMIC-ன் SMPS (Buck Converters) activate! ஒவ்வொரு rail-க்கும் <strong>Inductor + Capacitor</strong> pair இருக்கு.<br><br><strong>எப்படி work ஆகுது?</strong><br>PMIC உள்ளே switch ON/OFF → L101 (inductor) energy store/release → C201 (capacitor) smooth பண்ணும் → Clean steady voltage output!<br><br>இது <em>Buck Converter</em> topology — 3.8V input → 0.9V output efficient-ஆ convert.`,
+ tech:`VREG_S1: PMIC → L101 → C201 → VDD_CX = 0.9V\nVREG_S2: PMIC → L102 → C202 → VDD_MX = 0.75V\nVREG_S3: PMIC → L103 → C203 → VDD_GFX = 0.9V\n\nL101: ~0.47µH (buck inductor)\nC201: ~22µF (output filter)\nEfficiency: ~90%`,
+ comps:[
+  {n:'L101',t:'Inductor',f:'VDD_CX buck output — energy storage coil'},
+  {n:'C201',t:'Capacitor',f:'VDD_CX output filter — voltage smooth'},
+  {n:'L102',t:'Inductor',f:'VDD_MX buck output coil'},
+  {n:'C202',t:'Capacitor',f:'VDD_MX output filter'},
+  {n:'L103',t:'Inductor',f:'VDD_GFX buck output coil'},
+  {n:'C203',t:'Capacitor',f:'VDD_GFX output filter'},
+ ],
+ tip:`💡 L101 open (crack) ஆனா → VDD_CX 0V → CPU power இல்லை → 0.05A stuck. C201 short ஆனா → VDD_CX line short → high current. Inductor = beep ஆகணும், Cap = beep ஆக கூடாது.`},
+
+{id:4, title:"CPU ON! Decoupling Capacitors Active",emoji:"🧠",amp:"0.08",
+ on:['bat','pmic','c_pmic_in1','c_pmic_in2','crys','c_crys1','c_crys2','l_cx','c_cx','l_mx','c_mx','l_gfx','c_gfx','cpu','c_cpu1','c_cpu2','c_cpu3','c_cpu4','c_cpu5','c_cpu6','c_cpu7'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_crys_pmic',c:'clk',f:0},{id:'ln_pmic_cx',c:'pwr',f:1},{id:'ln_cx_cpu',c:'pwr',f:1},{id:'ln_pmic_mx',c:'pwr',f:1},{id:'ln_mx_cpu',c:'pwr',f:1}],
+ vtags:['v_vbat','v_cx','v_mx'],
+ desc:`CPU power rails reach → CPU ON!<br><br>CPU சுற்றிலும் <strong>C601 — C607 (7 decoupling capacitors)</strong> இருக்கு. ஏன்?<br><br>CPU very fast-ஆ switch ஆகும்போது sudden current spikes வரும். Decoupling caps = <em>"local mini batteries"</em> — instant current கொடுத்து voltage stable-ஆ வைக்கும்.<br><br>இவை இல்லாட்டி → voltage drop → CPU crash / hang!`,
+ tech:`CPU: PBL Executing from ROM\nC601-C605: 100nF each (top decoupling)\nC606-C607: 10µF each (bulk decoupling)\n\nRole: Instant current supply during\nCPU switching transients`,
+ comps:[
+  {n:'C601-C605',t:'Capacitors',f:'CPU top-side decoupling — HF noise filter'},
+  {n:'C606-C607',t:'Capacitors',f:'CPU bulk decoupling — current reservoir'},
+ ],
+ tip:`💡 CPU area-ல் capacitor short → VDD_CX/MX line short → high current, CPU area hot. ஒவ்வொரு cap-ஆ remove பண்ணி short find பண்ணுங்க. எந்த cap remove பண்ணினா short போகுதோ — அதுதான் faulty cap!`},
+
+{id:5, title:"CPU ↔ RAM — Memory Initialize",emoji:"📒",amp:"0.15",
+ on:['bat','pmic','crys','l_cx','c_cx','l_mx','c_mx','cpu','c_cpu1','c_cpu2','c_cpu3','c_cpu4','c_cpu5','ram','c_ram1','c_ram2'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cx_cpu',c:'pwr',f:0},{id:'ln_mx_cpu',c:'pwr',f:0},{id:'ln_cpu_ram',c:'dat',f:1}],
+ vtags:['v_cx','v_mx','v_ram'],
+ desc:`CPU → RAM communicate! LPDDR5 initialize.<br><br><em>C701, C702</em> = RAM power decoupling. VDDQ (0.5V) rail-ஐ stable-ஆ வைக்கும்.<br><br>CPU → Address bus + Data bus → RAM-ஓடு handshake. RAM respond ஆனா → bootloader load ஆரம்பம்.`,
+ tech:`RAM VDDQ: 0.5V ✓\nC701: Bulk decoupling\nC702: HF decoupling\nInterface: LPDDR5 multi-channel\nHandshake: In progress...`,
+ comps:[
+  {n:'C701',t:'Capacitor',f:'RAM VDDQ bulk filter'},
+  {n:'C702',t:'Capacitor',f:'RAM VDDQ HF filter'},
+ ],
+ tip:`💡 0.1A-0.2A-ல் stuck/loop → RAM communication fail. C701/C702 check. RAM reball or replace try. Software flash-ம் try பண்ணுங்க — sometimes eMMC issue-ம் same symptom.`},
+
+{id:6, title:"CPU → UFS Storage → OS Load!",emoji:"🗄️",amp:"0.25",
+ on:['bat','pmic','crys','l_cx','c_cx','l_mx','c_mx','cpu','c_cpu1','c_cpu2','c_cpu3','c_cpu4','c_cpu5','ram','c_ram1','c_ram2','ufs','c_ufs1'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cx_cpu',c:'pwr',f:0},{id:'ln_cpu_ram',c:'dat',f:0},{id:'ln_cpu_ufs',c:'dat',f:1}],
+ vtags:['v_cx','v_ufs'],
+ desc:`CPU → UFS 2.2 Storage → Bootloader + Android OS load!<br><br>UFS = PCIe protocol, very high speed. <em>C801</em> = UFS power filter cap.<br><br>VCC (2.5V) + VCCQ (1.2V) → UFS power rails. இரண்டும் correct-ஆ இருக்கணும்.`,
+ tech:`UFS VCC: 2.5V ✓\nUFS VCCQ: 1.2V ✓\nC801: Power filter\nBootloader: Loading...\nAndroid: Mounting partitions...`,
+ comps:[{n:'C801',t:'Capacitor',f:'UFS power filter — clean storage power'}],
+ tip:`💡 Boot loop = software 70%, UFS 30%. First flash try. Flash fail / QFIL-ல் detect ஆகல → UFS IC faulty.`},
+
+{id:7, title:"PS_HOLD Handshake! 🤝 CPU ↔ PMIC",emoji:"🤝",amp:"0.30",
+ on:['bat','pmic','crys','l_cx','c_cx','l_mx','c_mx','cpu','ram','ufs','c_cpu1','c_cpu2','c_cpu3','c_cpu4','c_cpu5'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cx_cpu',c:'pwr',f:0},{id:'ln_cpu_ram',c:'dat',f:0},{id:'ln_cpu_ufs',c:'dat',f:0},{id:'ln_pshold',c:'sig',f:1}],
+ vtags:['v_pshold'],
+ desc:`<strong>🤝 CRITICAL HANDSHAKE!</strong><br><br>CPU bootloader success → <strong>PS_HOLD = HIGH</strong> signal → PMIC-க்கு send.<br><br>Meaning: <em>"நான் alive! Power continue பண்ணு!"</em><br><br>PS_HOLD LOW/missing → PMIC power cut → <strong>Phone blink and die!</strong><br><br>இந்த signal ஒரு <em>single wire</em> — CPU pin → trace → PMIC pin. Trace crack ஆனாலும் same symptom.`,
+ tech:`PS_HOLD: HIGH ✓✓✓\nCPU → PMIC: "Keep power ON"\nAll primary rails: Maintained\nBoot: Continuing to Android...`,
+ comps:[],
+ tip:`💡 Phone blink → OFF (current spike then 0) = PS_HOLD problem. Check: 1) CPU boot fail (software?) 2) PS_HOLD trace broken 3) PMIC PS_HOLD pin issue.`},
+
+{id:8, title:"Baseband + RF + PA + Antenna! 📻",emoji:"📻",amp:"0.40",
+ on:['bat','pmic','crys','cpu','ram','ufs','bbic','c_bb1','c_bb2','pa','saw1','sim','antsw'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cpu_bb',c:'dat',f:1},{id:'ln_pmic_bb',c:'pwr',f:1},{id:'ln_bb_pa',c:'sig',f:1},{id:'ln_pa_ant',c:'sig',f:1},{id:'ln_bb_saw',c:'sig',f:1},{id:'ln_bb_sim',c:'dat',f:1}],
+ vtags:['v_sim'],
+ extras:['ant'],
+ desc:`Baseband Modem ON!<br><br>Signal path: CPU → <strong>RF Transceiver (WTR)</strong> → <strong>SAW Filter</strong> (frequency select) → <strong>Power Amplifier (PA)</strong> (signal boost) → <strong>Antenna Switch</strong> → <strong>📡 Antenna</strong><br><br><em>C1001, C1002</em> = Baseband IC decoupling.<br><br><strong>PA (Power Amplifier)</strong> = weak RF signal-ஐ strong-ஆ boost பண்ணும். இது separate IC!<br><strong>SAW Filter</strong> = specific frequency band மட்டும் pass பண்ணும்.`,
+ tech:`VDD_MDM: Active ✓\nRF Path: WTR → SAW → PA → ANT SW → 📡\nSIM: ISO 7816 Active\nBands: 5G NR + 4G LTE\nC1001/C1002: Baseband decoupling`,
+ comps:[
+  {n:'PA',t:'Power Amplifier IC',f:'RF signal boost for transmission'},
+  {n:'SAW',t:'SAW Filter',f:'Band-specific frequency filter'},
+  {n:'ANT SW',t:'Antenna Switch',f:'Routes signal to correct antenna'},
+  {n:'C1001',t:'Capacitor',f:'Baseband IC decoupling'},
+  {n:'C1002',t:'Capacitor',f:'Baseband IC HF filter'},
+ ],
+ tip:`💡 No Network: 1) SIM slot/connector check 2) Antenna disconnected? 3) PA damaged (common in drop) 4) SAW filter crack 5) Baseband IC (last resort). "Unknown Baseband" = Baseband IC dead.`},
+
+{id:9, title:"Display ON! ELVDD + ELVSS + MIPI 📺",emoji:"📺",amp:"0.55",
+ on:['bat','pmic','crys','cpu','ram','ufs','bbic','sim','dispic','bld','l_bl','c_bl','fpc_disp','c_disp_pwr'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cpu_disp',c:'dat',f:1},{id:'ln_pmic_disp',c:'pwr',f:1}],
+ vtags:['v_elvdd','v_elvss','v_disp'],
+ desc:`Display ON!<br><br><strong>Backlight Driver IC</strong> = PMIC-ல் இருந்து power எடுத்து → <em>L401 (inductor)</em> + <em>C901 (cap)</em> → <strong>ELVDD 4.6V</strong> generate (OLED positive supply).<br><br><strong>ELVSS -3.0V</strong> = OLED negative supply (charge pump).<br><br>CPU → <strong>MIPI DSI</strong> (4 lanes + 1 clock) → Display-க்கு video data.<br><br><em>C301</em> = Display logic power (VCC_DISP 1.8V) filter cap.`,
+ tech:`ELVDD: 4.6V (via BL Driver + L401 + C901)\nELVSS: -3.0V (charge pump)\nVCC_DISP: 1.8V (logic, via C301)\nMIPI DSI: 4 lanes ~1 Gbps/lane\nFPC: Connected ✓`,
+ comps:[
+  {n:'BL Driver',t:'IC',f:'Boost converter — generates ELVDD for OLED'},
+  {n:'L401',t:'Inductor',f:'Boost converter output coil'},
+  {n:'C901',t:'Capacitor',f:'ELVDD output filter'},
+  {n:'C301',t:'Capacitor',f:'Display logic VCC filter'},
+  {n:'FPC',t:'Connector',f:'Display flex cable connection'},
+ ],
+ tip:`💡 No Display: 1) FPC loose? reseat 2) Flashlight test → faint image = BL Driver or L401 3) C301 short = VCC_DISP short 4) MIPI lanes broken = partial display or lines on screen.`},
+
+{id:10, title:"Camera + I2C Pull-ups! 📷",emoji:"📷",amp:"0.60",
+ on:['bat','pmic','crys','cpu','ram','ufs','bbic','sim','dispic','bld','camic','r_cam_sda','r_cam_scl','c_cam1','c_cam_pwr','r_sda','r_scl','sensor'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_pmic_cam',c:'pwr',f:1},{id:'ln_cpu_cam',c:'dat',f:1},{id:'ln_cpu_sen',c:'dat',f:1}],
+ vtags:['v_cam'],
+ desc:`Camera activate! PMIC → <em>C302</em> filter → <strong>VCC_CAM 2.8V</strong> power.<br><br>CPU → Camera: <strong>MIPI CSI</strong> (image data, 4 lanes high speed).<br>CPU → Camera: <strong>I2C</strong> (control — focus, exposure settings).<br><br><em>R301, R302</em> = Camera I2C pull-up resistors (4.7kΩ). SDA, SCL lines-ஐ HIGH-ல் hold பண்ணும்.<br><br><strong>I2C Pull-up இல்லாட்டி?</strong> → Lines "floating" → Camera detect ஆகாது → "Camera error"!<br><br>Same logic — <em>R_SDA, R_SCL</em> = Main I2C bus pull-ups → Sensors (Gyro, Accel, Proximity, Light).`,
+ tech:`VCC_CAM: 2.8V (via C302 filter) ✓\nMIPI CSI: 4 lanes active\nI2C Camera: R301=4.7kΩ, R302=4.7kΩ\nI2C Sensors: R_SDA=4.7kΩ, R_SCL=4.7kΩ\nC303: Camera AVDD filter`,
+ comps:[
+  {n:'R301',t:'Resistor',f:'Camera I2C SDA pull-up (4.7kΩ)'},
+  {n:'R302',t:'Resistor',f:'Camera I2C SCL pull-up (4.7kΩ)'},
+  {n:'C302',t:'Capacitor',f:'Camera power filter'},
+  {n:'C303',t:'Capacitor',f:'Camera analog power filter'},
+  {n:'R_SDA',t:'Resistor',f:'Main I2C SDA pull-up (sensors)'},
+  {n:'R_SCL',t:'Resistor',f:'Main I2C SCL pull-up (sensors)'},
+ ],
+ tip:`💡 "Camera failed": 1) VCC_CAM 2.8V check 2) R301/R302 open? (should show 4.7kΩ) 3) MIPI CSI connector. Touch not working? → R_SDA/R_SCL check — same I2C bus!`},
+
+{id:11, title:"Audio + WiFi — Full System ON! ✅",emoji:"✅",amp:"0.65",
+ on:['bat','pmic','crys','cpu','ram','ufs','bbic','sim','dispic','bld','camic','sensor','audic','spkamp','c_aud','wific','c_wifi','r_sda','r_scl'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_cpu_aud',c:'dat',f:1},{id:'ln_cpu_wifi',c:'dat',f:1},{id:'ln_cpu_bb',c:'dat',f:0},{id:'ln_cpu_disp',c:'dat',f:0},{id:'ln_cpu_ram',c:'dat',f:0},{id:'ln_cpu_ufs',c:'dat',f:0},{id:'ln_cpu_sen',c:'dat',f:0}],
+ vtags:[],
+ extras:['ant'],
+ desc:`<strong>✅ FULL SYSTEM ON! Home Screen Ready!</strong><br><br>🔊 <strong>Audio Codec</strong> → I2S/SLIMbus protocol → CPU. Class-D Amplifier → Speaker. <em>C1101</em> = output coupling cap.<br><br>📶 <strong>WiFi/BT IC (WCN)</strong> → SDIO protocol → CPU. <em>C1201</em> = WiFi power filter.<br><br>இப்போ phone fully functional — எல்லா sections-ம் communicate ஆகுது!`,
+ tech:`Audio: I2S Active ✓\nSpeaker: Class-D Amp driving ✓\nWiFi: SDIO initialized ✓\nBluetooth: Active ✓\nAll Systems: GO ✓`,
+ comps:[
+  {n:'Audio Codec',t:'IC',f:'Digital ↔ Analog audio convert'},
+  {n:'Class-D Amp',t:'IC',f:'Speaker drive — efficient power amp'},
+  {n:'C1101',t:'Capacitor',f:'Audio output coupling — DC block'},
+  {n:'WiFi IC',t:'IC',f:'WiFi 6 + BT 5.3 combo'},
+  {n:'C1201',t:'Capacitor',f:'WiFi power decoupling'},
+ ],
+ tip:`💡 No Sound: 1) Speaker connector 2) Class-D Amp IC 3) C1101 open? No WiFi: 1) WiFi IC power check 2) C1201 short? 3) Antenna connector loose?`},
+
+{id:12, title:"Charger → Shunt → OVP → Charging IC → Battery ⚡",emoji:"⚡",amp:"0.80",
+ on:['bat','pmic','crys','cpu','ram','ufs','bbic','sim','dispic','bld','camic','sensor','audic','wific','usb','esd1','esd2','ovp','shunt','chgic','c_chg_in','c_chg_out','ntc'],
+ lines:[{id:'ln_bat_pmic',c:'pwr',f:1},{id:'ln_usb_ovp',c:'pwr',f:1},{id:'ln_ovp_chg',c:'pwr',f:1},{id:'ln_shunt',c:'pwr',f:1},{id:'ln_chg_bat',c:'pwr',f:1},{id:'ln_ntc',c:'sig',f:1},{id:'ln_chg_i2c',c:'dat',f:1}],
+ vtags:['v_vbus','v_vbat'],
+ desc:`<strong>⚡ CHARGING FLOW — Component by Component:</strong><br><br>1️⃣ <strong>USB-C Port</strong> → VBUS (5-10V) enter<br>2️⃣ <strong>ESD Diodes</strong> → Static protection (both D+ D- lines)<br>3️⃣ <strong>OVP IC</strong> → Over-Voltage check (10V+ = BLOCK!)<br>4️⃣ <strong>R_SHUNT (0.005Ω)</strong> → Current measurement! V=IR → voltage drop measure → current calculate → Battery % காட்டும்!<br>5️⃣ <strong>C401</strong> (input cap) → Charging IC input filter<br>6️⃣ <strong>Charging IC</strong> → Current regulate, voltage control<br>7️⃣ <strong>C402</strong> (output cap) → Output smooth<br>8️⃣ <strong>NTC Thermistor</strong> → Battery temperature monitor. Hot ஆனா → charging speed reduce!<br>9️⃣ Charging IC → <strong>I2C</strong> → CPU-க்கு report`,
+ tech:`VBUS: 5-10V (QC4+/PD 3.0)\nESD: D+/D- protected\nOVP: Pass ✓\nR_SHUNT: 0.005Ω (current sense)\nC401: Input filter 22µF\nCharging IC: 67W regulating\nC402: Output filter 47µF\nNTC: 32°C (safe)\nI2C → CPU: "45% charging..."`,
+ comps:[
+  {n:'ESD',t:'Diode',f:'Static protection on USB data lines'},
+  {n:'OVP IC',t:'IC',f:'Over-voltage cutoff (>10V block)'},
+  {n:'R_SHUNT',t:'Resistor',f:'0.005Ω — current measurement. Battery % display!'},
+  {n:'C401',t:'Capacitor',f:'Charging IC input filter'},
+  {n:'C402',t:'Capacitor',f:'Charging IC output filter'},
+  {n:'NTC',t:'Thermistor',f:'Battery temp sensor. Hot → slow charge'},
+ ],
+ tip:`💡 Not charging: 1) USB port lint/damage 2) ESD short → VBUS short 3) OVP tripped 4) R_SHUNT open → battery % wrong, no charge detect 5) NTC open → "temperature too high" error 6) C401 short → charging line short. Battery % wrong always → R_SHUNT check!`},
+];
+
+let cur=0, autoInt=null;
+
+function resetB(){
+  document.querySelectorAll('.ci').forEach(e=>{e.classList.remove('on','gw');});
+  document.querySelectorAll('.ln').forEach(e=>{e.className.baseVal='ln';});
+  document.querySelectorAll('.vt').forEach(e=>{e.style.display='none';});
+  document.querySelectorAll('.lt').forEach(e=>{e.classList.remove('on');});
+  document.querySelectorAll('.ct').forEach(e=>{e.classList.remove('on');});
+  const ant=document.getElementById('ant'); if(ant) ant.style.display='none';
+}
+
+function apply(i){
+  resetB();
+  const s=S[i];
+  s.on.forEach(id=>{const e=document.getElementById(id);if(e){e.classList.add('on');}});
+  s.lines.forEach(l=>{const e=document.getElementById(l.id);if(e){e.className.baseVal='ln '+l.c+(l.f?' fl':'');}});
+  s.vtags.forEach(v=>{const e=document.getElementById(v);if(e)e.style.display='block';});
+  if(s.extras) s.extras.forEach(x=>{const e=document.getElementById(x);if(e)e.style.display='block';});
+
+  // Highlight first 2 activated components with glow
+  let glowCount=0;
+  s.on.forEach(id=>{
+    const e=document.getElementById(id);
+    if(e && e.classList.contains('ic') && glowCount<2){e.classList.add('gw');glowCount++;}
+  });
+
+  // Build info panel
+  let compTable='';
+  if(s.comps && s.comps.length>0){
+    compTable=`<table class="comp-table"><tr><th>Component</th><th>Type</th><th>Function</th></tr>`;
+    s.comps.forEach(c=>{compTable+=`<tr><td>${c.n}</td><td>${c.t}</td><td>${c.f}</td></tr>`;});
+    compTable+=`</table>`;
+  }
+
+  document.getElementById('ip').innerHTML=`
+    <h2>${s.emoji} Stage ${s.id}</h2>
+    <div class="stitle">${s.title}</div>
+    <div class="desc">${s.desc}</div>
+    <div class="amp-box"><div class="lbl">DC Supply Reading</div><div class="val">${s.amp}</div><div class="unit">Ampere</div></div>
+    <div class="tech">${s.tech.replace(/\n/g,'<br>')}</div>
+    ${compTable}
+    <div class="tip">${s.tip}</div>
+  `;
+  document.getElementById('si').textContent=`Stage ${s.id} / ${S.length-1}`;
+}
+
+function next(){if(cur<S.length-1){cur++;apply(cur);}}
+function prev(){if(cur>0){cur--;apply(cur);}}
+function reset(){stopA();cur=0;apply(0);}
+function toggleAuto(){
+  const b=document.getElementById('ab');
+  if(autoInt){stopA();}
+  else{b.textContent='⏸ Stop';b.classList.add('playing');autoInt=setInterval(()=>{if(cur<S.length-1){cur++;apply(cur);}else stopA();},3500);}
+}
+function stopA(){const b=document.getElementById('ab');clearInterval(autoInt);autoInt=null;b.textContent='▶ Auto';b.classList.remove('playing');}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='r')reset();
+});
+
+apply(0);
+</script>
+</body>
+</html>
